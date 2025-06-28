@@ -1,0 +1,60 @@
+.add-button {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    font-family: inherit;
+    font-size: 2rem;
+    font-weight: 500;
+    color: white;
+    border: 1px solid white;
+    background: transparent;
+    cursor: pointer;
+    padding-bottom: 0.4rem;
+}
+
+.add-button:hover {
+    opacity: 0.8;
+    animation: invert-pulse 1.5s infinite;
+}
+
+
+.animated.add-button {
+    animation: pulse 1.5s infinite; 
+}
+
+.animated.add-button:hover {
+    animation: invert-pulse 1.5s infinite;
+}
+
+
+
+@keyframes invert-pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: inset 0 0 0 0 rgba(255, 255, 255, 0.6);
+    }
+    70% {
+        transform: scale(0.95);
+        box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: inset 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+    }
+    70% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
