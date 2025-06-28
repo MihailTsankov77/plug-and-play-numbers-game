@@ -1,14 +1,8 @@
 import './App.css'
-import { AddButton } from './components/addButton/AddButton'
-
+import { CellOrganizer } from './components/cellOrganizer/CellOrganizer'
 
 function App() {
-
-  return (
-    <>
-        <AddButton  animated/>
-    </>
-  )
+  return <CellOrganizer/>
 }
 
 export default App

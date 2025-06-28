@@ -2,7 +2,7 @@ import { memo } from "react";
 import "./AddButton.css";
 
 export const AddButton = memo(function AddButton(props: {
-  onPress: () => void;
+  onPress?: () => void;
   animated?: boolean;
 }) {
   return (
