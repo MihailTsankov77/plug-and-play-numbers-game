@@ -6,7 +6,9 @@ import { CellConfig } from "../../types/Cell";
 export const Cell = memo(function Cell(props: CellConfig) {
   return (
     <div className="cell">
-      <AddButton />
+      {/* <AddButton /> */}
+      <div className="cell-id">ID: {props.id}</div>
+      x: {props.dimensions.x}, y: {props.dimensions.y}
     </div>
   );
 });
