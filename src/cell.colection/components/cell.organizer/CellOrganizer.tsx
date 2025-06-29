@@ -1,18 +1,20 @@
 import { memo, useCallback, useState } from "react";
 import "./CellOrganizer.css";
-import { Cell, CellProps } from "../cell/Cell";
 import { CellRow } from "../cell.row/CellRow";
-import { AddButton } from "../add.button/AddButton";
 import { ColumnExpander } from "../column.expander/ColumnExpande";
 import { RowExpander } from "../row.expander/RowExpander";
+import { CellConfig } from "../../types/Cell";
+import { generateEmptyCell } from "../../utils/generateCell";
 
 const MaxDimensions = {
   rows: 6,
   columns: 6,
 };
 
-export const CellOrganizer = memo(function CellOrganizer(props: {}) {
-  const [cellsGrid, setCellsGrid] = useState<CellProps[][]>([[{}]]);
+export const CellOrganizer = memo(function CellOrganizer() {
+  const [cellsGrid, setCellsGrid] = useState<CellConfig[][]>(() => [
+    [generateEmptyCell()],
+  ]);
 
   const addRow = useCallback((direction: "top" | "bottom") => {
     setCellsGrid((prevGrid) => {
@@ -20,7 +22,7 @@ export const CellOrganizer = memo(function CellOrganizer(props: {}) {
         return prevGrid;
       }
 
-      const newRow: CellProps[] = prevGrid[0].map(() => ({}));
+      const newRow: CellConfig[] = prevGrid[0].map(generateEmptyCell);
 
       if (direction === "top") {
         return [newRow, ...prevGrid];
@@ -37,7 +39,7 @@ export const CellOrganizer = memo(function CellOrganizer(props: {}) {
       }
 
       return prevGrid.map((row) => {
-        const newCell: CellProps = {};
+        const newCell: CellConfig = generateEmptyCell();
         if (direction === "left") {
           return [newCell, ...row];
         }
