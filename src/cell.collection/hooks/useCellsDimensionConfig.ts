@@ -27,9 +27,11 @@ export function useCellsDimensionConfig(cells: CellConfig[][]): {
     if (!containerRef.current) return;
 
     const observer = new ResizeObserver(([entry]) => {
-      const { width, height, x, y } = entry.contentRect;
+      const { width, height } = entry.contentRect;
+      const rect = entry.target.getBoundingClientRect();
+      const { left, top } = rect;
 
-      setContainerDimensions({ x, y, width, height });
+      setContainerDimensions({ x: left, y: top, width, height });
     });
 
     observer.observe(containerRef.current);

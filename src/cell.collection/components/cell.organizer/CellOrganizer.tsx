@@ -8,6 +8,7 @@ import { MaxNumberOfCells } from "../../constants/CellLimits";
 import { useCellState } from "../../hooks/useCellState";
 import { useCellConnections } from "../../hooks/useCellConnections";
 import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
+import { CellConnections } from "../cell.connections/CellConnetions";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cells, setters } = useCellState(() => [
@@ -22,22 +23,30 @@ export const CellOrganizer = memo(function CellOrganizer() {
   const disableAddRow = cells.length >= MaxNumberOfCells.rows;
 
   return (
-    <div className="cell-organizer-1">
-      <ColumnExpander onPress={setters.left} disabled={disableAddColumn} />
+    <>
+      <div className="cell-organizer-1">
+        <ColumnExpander onPress={setters.left} disabled={disableAddColumn} />
 
-      <div className="cell-organizer-2">
-        <RowExpander onPress={setters.top} disabled={disableAddRow} />
+        <div className="cell-organizer-2">
+          <RowExpander onPress={setters.top} disabled={disableAddRow} />
 
-        <div className="cell-container" ref={containerRef}>
-          {cells.map((cellsPerRow, index) => (
-            <CellRow key={index} cells={cellsPerRow} />
-          ))}
+          <div className="cell-container" ref={containerRef}>
+            {cells.map((cellsPerRow, index) => (
+              <CellRow key={index} cells={cellsPerRow} />
+            ))}
+          </div>
+
+          <RowExpander onPress={setters.bottom} disabled={disableAddRow} />
         </div>
 
-        <RowExpander onPress={setters.bottom} disabled={disableAddRow} />
+        <ColumnExpander onPress={setters.right} disabled={disableAddColumn} />
       </div>
 
-      <ColumnExpander onPress={setters.right} disabled={disableAddColumn} />
-    </div>
+      <CellConnections
+        cells={cells}
+        connections={connections}
+        cellConfigDimensions={dimensions}
+      />
+    </>
   );
 });

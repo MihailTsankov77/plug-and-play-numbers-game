@@ -1,10 +1,11 @@
 import { useMemo } from "react";
 import { CellConfig } from "../types/Cell";
+import { Connection } from "../types/Connections";
 
 // TODO: rework to use width and height from CellConfig
-export function useCellConnections(cells: CellConfig[][]): [string, string][] {
+export function useCellConnections(cells: CellConfig[][]): Connection[] {
   return useMemo(() => {
-    const connections: [string, string][] = [];
+    const connections: Connection[] = [];
 
     cells.forEach((row, y) => {
       row.forEach((cell, x) => {
@@ -27,7 +28,11 @@ export function useCellConnections(cells: CellConfig[][]): [string, string][] {
             neighborX >= 0 &&
             neighborX < cells[neighborY].length
           ) {
-            connections.push([cellId, cells[neighborY][neighborX].id]);
+            connections.push({
+              from: cellId,
+              to: cells[neighborY][neighborX].id,
+              direction: dy === 0 ? "horizontal" : "vertical",
+            });
           }
         }
       });
