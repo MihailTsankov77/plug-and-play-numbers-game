@@ -1,13 +1,19 @@
 import { memo } from "react";
 import { CellConfig } from "../../types/Cell";
 import { Coordinates, Dimensions } from "../../types/Dimensions";
-import { PossibleConnection } from "../../types/Connections";
+import {
+  Connection,
+  ConnectionEvent,
+  PossibleConnection,
+} from "../../types/Connections";
 import { ConnectionButton } from "../connection.button/ConnectionButton";
 
 export const CellConnections = memo(function CellConnections(props: {
   cells: CellConfig[][];
   possibleConnections: PossibleConnection[];
   cellConfigDimensions: Dimensions;
+  connections: Connection[];
+  addConnection: (connection: ConnectionEvent) => void;
 }) {
   // TODO maybe improve move upwards
   const cellsById = props.cells
@@ -65,6 +71,8 @@ export const CellConnections = memo(function CellConnections(props: {
           key={index}
           coordinates={coordinates}
           possibleConnection={props.possibleConnections[index]}
+          connections={props.connections}
+          addConnection={props.addConnection}
         />
       ))}
     </>
