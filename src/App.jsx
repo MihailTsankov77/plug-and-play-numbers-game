@@ -1,5 +1,5 @@
 import './App.css'
-import { CellOrganizer } from './components/cellOrganizer/CellOrganizer'
+import {CellOrganizer} from "./cell.collection/components/cell.organizer/CellOrganizer";
 
 function App() {
   return <CellOrganizer/>
