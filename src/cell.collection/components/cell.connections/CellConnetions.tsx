@@ -6,7 +6,7 @@ import { ConnectionButton } from "../connection.button/ConnectionButton";
 
 export const CellConnections = memo(function CellConnections(props: {
   cells: CellConfig[][];
-  connections: PossibleConnection[];
+  possibleConnections: PossibleConnection[];
   cellConfigDimensions: Dimensions;
 }) {
   // TODO maybe improve move upwards
@@ -17,7 +17,7 @@ export const CellConnections = memo(function CellConnections(props: {
       return acc;
     }, {});
 
-  const connectionLocations = props.connections.map<Coordinates>(
+  const connectionLocations = props.possibleConnections.map<Coordinates>(
     ({ from, to, direction }) => {
       const fromCell = cellsById[from];
       const toCell = cellsById[to];
@@ -60,11 +60,11 @@ export const CellConnections = memo(function CellConnections(props: {
 
   return (
     <>
-      {connectionLocations.map((coord, index) => (
+      {connectionLocations.map((coordinates, index) => (
         <ConnectionButton
           key={index}
-          {...coord}
-          {...props.connections[index]}
+          coordinates={coordinates}
+          possibleConnection={props.possibleConnections[index]}
         />
       ))}
     </>

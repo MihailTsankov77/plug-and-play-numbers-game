@@ -6,7 +6,7 @@ import { RowExpander } from "../row.expander/RowExpander";
 import { generateEmptyCell } from "../../utils/generateCell";
 import { MaxNumberOfCells } from "../../constants/CellLimits";
 import { useCellState } from "../../hooks/useCellState";
-import { useCellConnections } from "../../hooks/useCellConnections";
+import { useCellsPossibleConnections } from "../../hooks/useCellsPossibleConnections";
 import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
 import { CellConnections } from "../cell.connections/CellConnetions";
 
@@ -15,7 +15,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
     [generateEmptyCell({ x: 0, y: 0 })],
   ]);
 
-  const connections = useCellConnections(cells);
+  const possibleConnection = useCellsPossibleConnections(cells);
 
   const { containerRef, dimensions } = useCellsDimensionConfig(cells);
 
@@ -44,7 +44,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
 
       <CellConnections
         cells={cells}
-        connections={connections}
+        possibleConnections={possibleConnection}
         cellConfigDimensions={dimensions}
       />
     </>

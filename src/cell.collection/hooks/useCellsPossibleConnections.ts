@@ -3,7 +3,7 @@ import { CellConfig } from "../types/Cell";
 import { PossibleConnection } from "../types/Connections";
 
 // TODO: rework to use width and height from CellConfig
-export function useCellConnections(
+export function useCellsPossibleConnections(
   cells: CellConfig[][]
 ): PossibleConnection[] {
   return useMemo(() => {
