@@ -1,4 +1,4 @@
-import { memo, useLayoutEffect, useRef, useState } from "react";
+import { memo } from "react";
 import "./CellOrganizer.css";
 import { CellRow } from "../cell.row/CellRow";
 import { ColumnExpander } from "../column.expander/ColumnExpander";
@@ -6,7 +6,7 @@ import { RowExpander } from "../row.expander/RowExpander";
 import { generateEmptyCell } from "../../utils/generateCell";
 import { MaxNumberOfCells } from "../../constants/CellLimits";
 import { useCellState } from "../../hooks/useCellState";
-import { useCellNeighborsById } from "../../hooks/useCellNeighborsById";
+import { useCellConnections } from "../../hooks/useCellConnections";
 import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
 
 export const CellOrganizer = memo(function CellOrganizer() {
@@ -14,7 +14,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
     [generateEmptyCell({ x: 0, y: 0 })],
   ]);
 
-  const neighbors = useCellNeighborsById(cells);
+  const connections = useCellConnections(cells);
 
   const { containerRef, dimensions } = useCellsDimensionConfig(cells);
 

@@ -2,22 +2,19 @@ import { useMemo } from "react";
 import { CellConfig } from "../types/Cell";
 
 // TODO: rework to use width and height from CellConfig
-export function useCellNeighborsById(
-  cells: CellConfig[][]
-): Record<string, string[]> {
+export function useCellConnections(cells: CellConfig[][]): [string, string][] {
   return useMemo(() => {
-    const neighborsById: Record<string, string[]> = {};
+    const connections: [string, string][] = [];
 
     cells.forEach((row, y) => {
       row.forEach((cell, x) => {
         const cellId = cell.id;
-        const neighbors: string[] = [];
 
+        // Check only bottom and right neighbors, because the other are already checked
+        // from the previous cells
         const directions = [
-          [-1, 0], // up
           [0, 1], // right
           [1, 0], // down
-          [0, -1], // left
         ];
 
         for (const [dy, dx] of directions) {
@@ -30,14 +27,12 @@ export function useCellNeighborsById(
             neighborX >= 0 &&
             neighborX < cells[neighborY].length
           ) {
-            neighbors.push(cells[neighborY][neighborX].id);
+            connections.push([cellId, cells[neighborY][neighborX].id]);
           }
         }
-
-        neighborsById[cellId] = neighbors;
       });
     });
 
-    return neighborsById;
+    return connections;
   }, [cells]);
 }
