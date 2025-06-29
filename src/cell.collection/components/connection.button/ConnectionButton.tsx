@@ -69,7 +69,18 @@ export const ConnectionButton = memo(function ConnectionButton(props: {
         top: `${props.coordinates.y}px`,
       }}
     >
-      <div className="connection-button" onClick={onPress} />
+      <div className={`connection-button ${state}`} onClick={onPress}>
+        <img
+          src={`src/cell.collection/components/connection.button/assets/${state}.png`}
+          style={
+            props.possibleConnection.direction === "vertical"
+              ? {
+                  transform: "rotate(90deg)",
+                }
+              : undefined
+          }
+        />
+      </div>
     </div>
   );
 });

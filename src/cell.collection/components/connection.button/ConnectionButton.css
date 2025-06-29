@@ -12,9 +12,16 @@
 .connection-button {
   width: 2rem;
   height: 2rem;
-  background-color: red;
+  background-color: wheat;
   border-radius: 50%;
   cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.connection-button.inactive {
   display: none;
 }
 
@@ -22,3 +29,8 @@
   display: block;
 }
 
+.connection-button>img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
