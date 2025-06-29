@@ -1,8 +1,7 @@
 import { useCallback, useState } from "react";
-import "./CellOrganizer.css";
-import { CellConfig } from "../../types/Cell";
-import { generateEmptyCell } from "../../utils/generateCell";
-import { MaxNumberOfCells } from "./constants";
+import { CellConfig } from "../types/Cell";
+import { generateEmptyCell } from "../utils/generateCell";
+import { MaxNumberOfCells } from "../constants/CellLimits";
 
 export function useCellState(initStateFn: () => CellConfig[][]): {
   cells: CellConfig[][];

@@ -4,8 +4,8 @@ import { CellRow } from "../cell.row/CellRow";
 import { ColumnExpander } from "../column.expander/ColumnExpander";
 import { RowExpander } from "../row.expander/RowExpander";
 import { generateEmptyCell } from "../../utils/generateCell";
-import { MaxNumberOfCells } from "./constants";
-import { useCellState } from "./useCellState";
+import { MaxNumberOfCells } from "../../constants/CellLimits";
+import { useCellState } from "../../hooks/useCellState";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cells, setters } = useCellState(() => [
