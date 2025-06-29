@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useLayoutEffect, useRef, useState } from "react";
 import "./CellOrganizer.css";
 import { CellRow } from "../cell.row/CellRow";
 import { ColumnExpander } from "../column.expander/ColumnExpander";
@@ -7,6 +7,7 @@ import { generateEmptyCell } from "../../utils/generateCell";
 import { MaxNumberOfCells } from "../../constants/CellLimits";
 import { useCellState } from "../../hooks/useCellState";
 import { useCellNeighborsById } from "../../hooks/useCellNeighborsById";
+import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cells, setters } = useCellState(() => [
@@ -14,6 +15,8 @@ export const CellOrganizer = memo(function CellOrganizer() {
   ]);
 
   const neighbors = useCellNeighborsById(cells);
+
+  const { containerRef, dimensions } = useCellsDimensionConfig(cells);
 
   const disableAddColumn = cells[0].length >= MaxNumberOfCells.columns;
   const disableAddRow = cells.length >= MaxNumberOfCells.rows;
@@ -25,7 +28,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
       <div className="cell-organizer-2">
         <RowExpander onPress={setters.top} disabled={disableAddRow} />
 
-        <div className="cell-container">
+        <div className="cell-container" ref={containerRef}>
           {cells.map((cellsPerRow, index) => (
             <CellRow key={index} cells={cellsPerRow} />
           ))}
