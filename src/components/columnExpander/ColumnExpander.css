@@ -5,14 +5,17 @@
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.1);
     width: 2.5rem;
-    cursor: pointer;
-
 }
+
+.enabled.column-expander {
+    cursor: pointer;
+}
+
 .column-expander > * {
     display: none;
 }
 
-.column-expander:hover > * {
+.enabled.column-expander:hover > * {
     display: block;
 }
 

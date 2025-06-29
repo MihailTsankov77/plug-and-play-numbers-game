@@ -5,14 +5,17 @@
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.1);
     height: 2.5rem;
-    cursor: pointer;
-
 }
+
+.enabled.row-expander {
+    cursor: pointer;
+}
+
 .row-expander > * {
     display: none;
 }
 
-.row-expander:hover > * {
+.enabled.row-expander:hover > * {
     display: block;
 }
 
