@@ -1,0 +1,24 @@
+.connection-button-container {
+  z-index: 1000; 
+  width: 5rem;
+  height: 5rem;
+  transform: translate(-50%, -50%); 
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.connection-button {
+  width: 2rem;
+  height: 2rem;
+  background-color: red;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+}
+
+.connection-button-container:hover .connection-button {
+  display: block;
+}
+

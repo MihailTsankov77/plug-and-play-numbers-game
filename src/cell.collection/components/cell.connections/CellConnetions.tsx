@@ -2,6 +2,7 @@ import { memo } from "react";
 import { CellConfig } from "../../types/Cell";
 import { Coordinates, Dimensions } from "../../types/Dimensions";
 import { PossibleConnection } from "../../types/Connections";
+import { ConnectionButton } from "../connection.button/ConnectionButton";
 
 export const CellConnections = memo(function CellConnections(props: {
   cells: CellConfig[][];
@@ -60,19 +61,10 @@ export const CellConnections = memo(function CellConnections(props: {
   return (
     <>
       {connectionLocations.map((coord, index) => (
-        <div
+        <ConnectionButton
           key={index}
-          style={{
-            position: "absolute",
-            left: `${coord.x}px`,
-            top: `${coord.y}px`,
-            width: "18px",
-            height: "18px",
-            backgroundColor: "red",
-            borderRadius: "50%",
-            transform: "translate(-50%, -50%)", // Center the dot
-            pointerEvents: "none", // Avoid blocking interactions
-          }}
+          {...coord}
+          {...props.connections[index]}
         />
       ))}
     </>
