@@ -1,15 +1,25 @@
 .add-button {
-    width: 3rem;
-    height: 3rem;
     border-radius: 50%;
     font-family: inherit;
-    font-size: 2rem;
     font-weight: 500;
     color: white;
     border: 1px solid white;
     background: transparent;
     cursor: pointer;
+}
+
+.medium.add-button {
+    width: 3rem;
+    height: 3rem;
+    font-size: 2rem;
     padding-bottom: 0.4rem;
+}
+
+.small.add-button {
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 0.9rem;
+    padding-bottom: 0.2rem;
 }
 
 .add-button:hover {
