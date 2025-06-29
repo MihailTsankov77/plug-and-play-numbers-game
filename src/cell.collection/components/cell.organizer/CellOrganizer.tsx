@@ -6,11 +6,14 @@ import { RowExpander } from "../row.expander/RowExpander";
 import { generateEmptyCell } from "../../utils/generateCell";
 import { MaxNumberOfCells } from "../../constants/CellLimits";
 import { useCellState } from "../../hooks/useCellState";
+import { useCellNeighborsById } from "../../hooks/useCellNeighborsById";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cells, setters } = useCellState(() => [
     [generateEmptyCell({ x: 0, y: 0 })],
   ]);
+
+  const neighbors = useCellNeighborsById(cells);
 
   const disableAddColumn = cells[0].length >= MaxNumberOfCells.columns;
   const disableAddRow = cells.length >= MaxNumberOfCells.rows;
