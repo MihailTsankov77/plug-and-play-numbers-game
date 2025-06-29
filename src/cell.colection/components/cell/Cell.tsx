@@ -1,6 +1,6 @@
 import { memo } from "react";
 import "./Cell.css";
-import { AddButton } from "../addButton/AddButton";
+import { AddButton } from "../add.button/AddButton";
 
 export type CellProps = {};
 

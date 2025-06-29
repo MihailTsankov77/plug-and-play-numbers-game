@@ -1,10 +1,10 @@
 import { memo, useCallback, useState } from "react";
 import "./CellOrganizer.css";
 import { Cell, CellProps } from "../cell/Cell";
-import { CellRow } from "../cellRow/CellRow";
-import { AddButton } from "../addButton/AddButton";
-import { ColumnExpander } from "../columnExpander/ColumnExpande";
-import { RowExpander } from "../rowExpander/RowExpander";
+import { CellRow } from "../cell.row/CellRow";
+import { AddButton } from "../add.button/AddButton";
+import { ColumnExpander } from "../column.expander/ColumnExpande";
+import { RowExpander } from "../row.expander/RowExpander";
 
 const MaxDimensions = {
   rows: 6,

@@ -1,6 +1,6 @@
 import { memo } from "react";
 import "./ColumnExpander.css";
-import { AddButton } from "../addButton/AddButton";
+import { AddButton } from "../add.button/AddButton";
 
 export const ColumnExpander = memo(function ColumnExpander(props: {
   onPress: () => void;
