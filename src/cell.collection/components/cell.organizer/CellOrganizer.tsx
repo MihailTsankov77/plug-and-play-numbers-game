@@ -5,6 +5,7 @@ import { ColumnExpander } from "../column.expander/ColumnExpande";
 import { RowExpander } from "../row.expander/RowExpander";
 import { CellConfig } from "../../types/Cell";
 import { generateEmptyCell } from "../../utils/generateCell";
+import { Coordinates } from "../../types/Dimensions";
 
 const MaxDimensions = {
   rows: 6,
@@ -13,7 +14,7 @@ const MaxDimensions = {
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const [cellsGrid, setCellsGrid] = useState<CellConfig[][]>(() => [
-    [generateEmptyCell()],
+    [generateEmptyCell({ x: 0, y: 0 })],
   ]);
 
   const addRow = useCallback((direction: "top" | "bottom") => {
@@ -22,10 +23,24 @@ export const CellOrganizer = memo(function CellOrganizer() {
         return prevGrid;
       }
 
-      const newRow: CellConfig[] = prevGrid[0].map(generateEmptyCell);
+      const y = direction === "top" ? 0 : prevGrid.length;
+
+      const newRow: CellConfig[] = prevGrid[0].map((cell) =>
+        generateEmptyCell({ y, x: cell.dimensions.x })
+      );
 
       if (direction === "top") {
-        return [newRow, ...prevGrid];
+        const modifyPrevGrid = prevGrid.map((row) =>
+          row.map((cell) => ({
+            ...cell,
+            dimensions: {
+              ...cell.dimensions,
+              y: cell.dimensions.y + 1,
+            },
+          }))
+        );
+
+        return [newRow, ...modifyPrevGrid];
       }
 
       return [...prevGrid, newRow];
@@ -39,9 +54,21 @@ export const CellOrganizer = memo(function CellOrganizer() {
       }
 
       return prevGrid.map((row) => {
-        const newCell: CellConfig = generateEmptyCell();
+        const newCell: CellConfig = generateEmptyCell({
+          x: direction === "left" ? 0 : row.length,
+          y: row[0].dimensions.y,
+        });
+
         if (direction === "left") {
-          return [newCell, ...row];
+          const modifyPrevRow = row.map((cell) => ({
+            ...cell,
+            dimensions: {
+              ...cell.dimensions,
+              x: cell.dimensions.x + 1,
+            },
+          }));
+
+          return [newCell, ...modifyPrevRow];
         }
 
         return [...row, newCell];
