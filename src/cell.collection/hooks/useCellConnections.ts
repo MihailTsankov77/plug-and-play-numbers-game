@@ -1,11 +1,13 @@
 import { useMemo } from "react";
 import { CellConfig } from "../types/Cell";
-import { Connection } from "../types/Connections";
+import { PossibleConnection } from "../types/Connections";
 
 // TODO: rework to use width and height from CellConfig
-export function useCellConnections(cells: CellConfig[][]): Connection[] {
+export function useCellConnections(
+  cells: CellConfig[][]
+): PossibleConnection[] {
   return useMemo(() => {
-    const connections: Connection[] = [];
+    const connections: PossibleConnection[] = [];
 
     cells.forEach((row, y) => {
       row.forEach((cell, x) => {
