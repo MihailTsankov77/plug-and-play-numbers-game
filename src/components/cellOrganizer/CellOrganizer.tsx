@@ -1,17 +1,18 @@
 import { memo, useState } from "react";
 import "./CellOrganizer.css";
-import { Cell } from "../cell/Cell";
+import { Cell, CellProps } from "../cell/Cell";
 import { CellRow } from "../cellRow/CellRow";
 
 export const CellOrganizer = memo(function CellOrganizer(props: {}) {
-  const [cellsPerRow, setCellsPerRow] = useState<number[]>([1, 2]);
-
-  const cellHeight = window.innerHeight / cellsPerRow.length;
+  const [cellsGrid, setCellsGrid] = useState<CellProps[][]>([
+    [{}, {}],
+    [{}, {}],
+  ]);
 
   return (
     <div className="cell-container">
-      {cellsPerRow.map((cells, index) => (
-        <CellRow key={index} cells={cells} height={cellHeight} />
+      {cellsGrid.map((cellsPerRow, index) => (
+        <CellRow key={index} cells={cellsPerRow} />
       ))}
     </div>
   );
