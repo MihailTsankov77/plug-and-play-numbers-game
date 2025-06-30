@@ -1,15 +1,17 @@
 import { memo } from "react";
 import "./CellBlock.css";
 import { Cell } from "../cell/Cell";
-import { CellConfig } from "../../types/Cell";
+import { CellConfig, CellId } from "../../types/Cell";
 import {
   CellCollection,
   CellColumn,
   CellRow,
 } from "../../types/CellCollection";
+import { Direction } from "../../types/Dimensions";
 
 type CommonProps = {
   cellsById: Record<string, CellConfig>;
+  addCell: (containerId: string, cellId: CellId, direction: Direction) => void;
 };
 
 export const CellBlock = memo(function CellBlock(
@@ -33,11 +35,15 @@ export const CellBlock = memo(function CellBlock(
 });
 
 const Row = memo(function Row(props: CellRow & CommonProps) {
+  const addCell = (cellId: CellId, direction: Direction) => {
+    props.addCell(props.id, cellId, direction);
+  };
+
   return (
     <div className="cell-row">
       {props.children.map((child) =>
         typeof child === "string" ? (
-          <Cell key={child} {...props.cellsById[child]} />
+          <Cell key={child} {...props.cellsById[child]} addCell={addCell} />
         ) : (
           <Column key={child.id} {...props} {...child} />
         )

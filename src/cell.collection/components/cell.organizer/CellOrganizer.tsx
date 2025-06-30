@@ -13,7 +13,7 @@ import { Connection, ConnectionEvent } from "../../types/Connections";
 import { useConnectionState } from "../../hooks/useConnectionState";
 
 export const CellOrganizer = memo(function CellOrganizer() {
-  const { cellCollection, cellsById, setters } = useCellState(() =>
+  const { cellCollection, cellsById, addCell } = useCellState(() =>
     generateEmptyCell({ x: 0, y: 0 })
   );
 
@@ -38,7 +38,11 @@ export const CellOrganizer = memo(function CellOrganizer() {
           {/* <RowExpander onPress={setters.top} disabled={disableAddRow} /> */}
 
           <div className="cell-container" /*ref={containerRef}*/>
-            <CellBlock cellCollection={cellCollection} cellsById={cellsById} />
+            <CellBlock
+              cellCollection={cellCollection}
+              cellsById={cellsById}
+              addCell={addCell}
+            />
           </div>
 
           {/* <RowExpander onPress={setters.bottom} disabled={disableAddRow} /> */}

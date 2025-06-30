@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import { CellConfig, CellId } from "../types/Cell";
 import { Direction } from "../types/Dimensions";
 import { CellCollection, CellColumn, CellRow } from "../types/CellCollection";
@@ -19,18 +19,17 @@ function generateColumn(children: CellRow[]): CellColumn {
   };
 }
 
-function findElementById<Type extends "row" | "column">(
-  type: Type,
+function findElementById(
   collection: CellCollection,
   id: string
-): (CellCollection & { type: Type }) | undefined {
-  if (collection.type === type && collection.id === id) {
-    return collection as CellCollection & { type: Type };
+): CellCollection | undefined {
+  if (collection.id === id) {
+    return collection;
   }
 
   for (const child of collection.children) {
     if (typeof child === "string") continue;
-    const found = findElementById(type, child, id);
+    const found = findElementById(child, id);
     if (found) return found;
   }
 }
@@ -38,10 +37,7 @@ function findElementById<Type extends "row" | "column">(
 export function useCellState(initStateFn: () => CellConfig): {
   cellCollection: CellCollection;
   cellsById: Record<string, CellConfig>;
-  setters: {
-    addToRow: (id: string, direction: Direction) => void;
-    addToColumn: (id: string, direction: Direction) => void;
-  };
+  addCell: (containerId: string, cellId: string, direction: Direction) => void;
 } {
   const [initCell] = useState(initStateFn);
   const [cellCollection, setCellCollection] = useState<CellCollection>(() =>
@@ -51,75 +47,64 @@ export function useCellState(initStateFn: () => CellConfig): {
     [initCell.id]: initCell,
   });
 
-  const addToRow = useCallback((id: string, direction: Direction) => {
-    setCellCollection((prevCollection) => {
-      const row = findElementById("row", prevCollection, id);
+  const addToRow = useCallback(
+    (row: CellRow, cellId: CellId, direction: Direction) => {
+      setCellCollection((prevCollection) => {
+        switch (direction) {
+          case "up": {
+            break;
+          }
+          case "down": {
+            break;
+          }
+          case "left": {
+            break;
+          }
+          case "right": {
+            break;
+          }
 
-      if (!row) return prevCollection;
-
-      switch (direction) {
-        case "up": {
-          break;
-        }
-        case "down": {
-          break;
-        }
-        case "left": {
-          break;
-        }
-        case "right": {
-          break;
+          default: {
+            direction satisfies never;
+          }
         }
 
-        default: {
-          direction satisfies never;
-        }
+        return prevCollection;
+      });
+    },
+    []
+  );
+
+  const addCell = useCallback(
+    (containerId: string, cellId: CellId, direction: Direction) => {
+      const element = findElementById(cellCollection, containerId);
+
+      if (!element) {
+        console.error(
+          `Element with id ${containerId} not found in the collection.`
+        );
+        return;
       }
 
-      return prevCollection;
-    });
-  }, []);
-
-  const addToColumn = useCallback((id: string, direction: Direction) => {
-    setCellCollection((prevCollection) => {
-      const column = findElementById("column", prevCollection, id);
-
-      if (!column) return prevCollection;
-
-      switch (direction) {
-        case "up": {
-          break;
+      switch (element.type) {
+        case "row": {
+          return addToRow(element, cellId, direction);
         }
-        case "down": {
-          break;
+        case "column": {
+          console.error("Please use rows.");
         }
-        case "left": {
-          break;
-        }
-        case "right": {
-          break;
-        }
-
         default: {
-          direction satisfies never;
+          console.error("Unknown element type:", element);
+          return;
         }
       }
-
-      return prevCollection;
-    });
-  }, []);
-
-  const setters = useMemo(
-    () => ({
-      addToRow,
-      addToColumn,
-    }),
-    [addToRow, addToColumn]
+    },
+    [addToRow]
   );
 
   return {
     cellCollection,
     cellsById,
-    setters,
+    addCell,
   };
 }

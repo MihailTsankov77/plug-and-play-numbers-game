@@ -1,13 +1,16 @@
 import { memo } from "react";
 import "./Cell.css";
-import { AddButton } from "../add.button/AddButton";
-import { CellConfig } from "../../types/Cell";
+import { CellConfig, CellId } from "../../types/Cell";
 import { AddCellButton } from "../add.cell.button/AddCellButton";
 import { Direction } from "../../types/Dimensions";
 
-export const Cell = memo(function Cell(props: CellConfig) {
+export const Cell = memo(function Cell(
+  props: CellConfig & {
+    addCell: (cellId: CellId, direction: Direction) => void;
+  }
+) {
   const onPress = (direction: Direction) => {
-    // props.addCell(direction);
+    props.addCell(props.id, direction);
   };
 
   return (
