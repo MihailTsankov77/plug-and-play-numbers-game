@@ -1,16 +1,15 @@
 import { memo, useLayoutEffect, useRef } from "react";
 import "./Cell.css";
-import { CellConfig, CellId } from "../../types/Cell";
+import { CellId } from "../../types/Cell";
 import { AddCellButton } from "../add.cell.button/AddCellButton";
 import { Direction } from "../../types/Dimensions";
 import { useCellDimensionsContext } from "../../hooks/useCellsDimensions";
 import { AddButton } from "../add.button/AddButton";
 
-export const Cell = memo(function Cell(
-  props: CellConfig & {
-    addCell: (cellId: CellId, direction: Direction) => void;
-  }
-) {
+export const Cell = memo(function Cell(props: {
+  id: CellId;
+  addCell: (cellId: CellId, direction: Direction) => void;
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const { setDimensions } = useCellDimensionsContext();

@@ -1,16 +1,13 @@
 import { memo } from "react";
 import "./CellOrganizer.css";
 import { CellBlock } from "../cell.blocks/CellBlock";
-import { generateEmptyCell } from "../../utils/generateCell";
 import { useCellState } from "../../hooks/useCellState";
 import { CellConnections } from "../cell.connections/CellConnections";
 import { useConnectionState } from "../../hooks/useConnectionState";
 import { useCellsDimensions } from "../../hooks/useCellsDimensions";
 
 export const CellOrganizer = memo(function CellOrganizer() {
-  const { cellCollection, cellsById, addCell } = useCellState(() =>
-    generateEmptyCell()
-  );
+  const { cellCollection, addCell } = useCellState();
 
   const { cellDimensions, CellDimensionsProvider } = useCellsDimensions();
 
@@ -20,11 +17,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
     <>
       <div className="cell-container">
         <CellDimensionsProvider>
-          <CellBlock
-            cellCollection={cellCollection}
-            cellsById={cellsById}
-            addCell={addCell}
-          />
+          <CellBlock cellCollection={cellCollection} addCell={addCell} />
         </CellDimensionsProvider>
       </div>
 

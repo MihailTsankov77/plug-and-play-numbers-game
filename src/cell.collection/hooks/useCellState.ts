@@ -1,24 +1,11 @@
 import { useCallback, useState } from "react";
-import { CellConfig, CellId } from "../types/Cell";
+import { CellId, CellCollection } from "../types/Cell";
 import { Direction } from "../types/Dimensions";
-import { CellCollection, CellColumn, CellRow } from "../types/CellCollection";
-import { generateEmptyCell } from "../utils/generateCell";
-
-function generateRow(children: CellId[]): CellRow {
-  return {
-    id: crypto.randomUUID(),
-    type: "row",
-    children,
-  };
-}
-
-function generateColumn(children: CellId[]): CellColumn {
-  return {
-    id: crypto.randomUUID(),
-    type: "column",
-    children,
-  };
-}
+import {
+  generateCellColumn,
+  generateCellId,
+  generateCellRow,
+} from "../utils/generators";
 
 function findElementById(
   collection: CellCollection,
@@ -58,25 +45,13 @@ const TransformDirectionsForColumn: Record<Direction, Direction> = {
   right: "down",
 };
 
-export function useCellState(initStateFn: () => CellConfig): {
+export function useCellState(): {
   cellCollection: CellCollection;
-  cellsById: Record<string, CellConfig>;
-  addCell: (containerId: string, cellId: string, direction: Direction) => void;
+  addCell: (containerId: string, cellId: CellId, direction: Direction) => void;
 } {
-  const [initCell] = useState(initStateFn);
   const [cellCollection, setCellCollection] = useState<CellCollection>(() =>
-    generateRow([initCell.id])
+    generateCellRow([generateCellId()])
   );
-  const [cellsById, setCellsById] = useState<Record<string, CellConfig>>({
-    [initCell.id]: initCell,
-  });
-
-  const addNewCell = useCallback(() => {
-    const newCell = generateEmptyCell();
-
-    setCellsById((prev) => ({ ...prev, [newCell.id]: newCell }));
-    return newCell.id;
-  }, []);
 
   const addCell = useCallback(
     (containerId: string, cellId: CellId, _direction: Direction) => {
@@ -104,25 +79,25 @@ export function useCellState(initStateFn: () => CellConfig): {
             : _direction;
 
         const generator =
-          container.type === "column" ? generateRow : generateColumn;
+          container.type === "column" ? generateCellRow : generateCellColumn;
 
         switch (direction) {
           case "up": {
-            newChildren[index] = generator([addNewCell(), cellId]);
+            newChildren[index] = generator([generateCellId(), cellId]);
 
             break;
           }
           case "down": {
-            newChildren[index] = generator([cellId, addNewCell()]);
+            newChildren[index] = generator([cellId, generateCellId()]);
 
             break;
           }
           case "left": {
-            newChildren.splice(index, 0, addNewCell());
+            newChildren.splice(index, 0, generateCellId());
             break;
           }
           case "right": {
-            newChildren.splice(index + 1, 0, addNewCell());
+            newChildren.splice(index + 1, 0, generateCellId());
             break;
           }
 
@@ -140,7 +115,6 @@ export function useCellState(initStateFn: () => CellConfig): {
 
   return {
     cellCollection,
-    cellsById,
     addCell,
   };
 }
