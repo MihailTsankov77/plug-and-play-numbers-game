@@ -1,0 +1,26 @@
+.add-cell-button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.add-cell-button-mask {
+  position: absolute;
+  top: -2rem;
+  left: -2rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  pointer-events: auto;
+  z-index: 1;
+}
+
+.add-cell-button-wrapper {
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  position: relative;
+}
+
+.add-cell-button-container:hover .add-cell-button-wrapper {
+  opacity: 1;
+  pointer-events: auto;
+}

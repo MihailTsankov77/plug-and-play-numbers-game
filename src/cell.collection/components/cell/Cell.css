@@ -1,11 +1,25 @@
+.cell-container-1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+
+  padding: 2rem;
+  border: 1px solid white;
+}
+
+.cell-container-2 {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .cell {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  flex:1;
-
-  background-color: #242424;
-  border: 1px solid white;
-
+  margin: 5px;
 }
