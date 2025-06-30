@@ -72,101 +72,61 @@ export function useCellState(initStateFn: () => CellConfig): {
     return newCell.id;
   }, []);
 
-  const addHorizontalToRow = useCallback(
-    (containerId: string, cellId: CellId, direction: "left" | "right") => {
-      const container = findElementById(cellCollection, containerId);
-      if (!container || container.type !== "row") {
-        console.error(`Container with id ${containerId} not found`);
-        return;
-      }
-
-      const index = container.children.indexOf(cellId);
-      if (index === -1) {
-        console.error(
-          `Cell with id ${cellId} not found in container ${containerId}`,
-          cellCollection
-        );
-        return;
-      }
-
-      setCellCollection((prev) => {
-        const targetRow = findElementById(prev, containerId) as CellRow;
-        const newChildren = targetRow.children;
-
-        if (direction === "left") {
-          // TODO coordinates
-          newChildren.splice(index, 0, addNewCell());
-        } else {
-          // TODO coordinates
-          newChildren.splice(index + 1, 0, addNewCell());
-        }
-
-        targetRow.children = newChildren;
-        return updateCollection(prev, targetRow);
-      });
-    },
-    [cellCollection]
-  );
-
-  const addVerticalToRow = useCallback(
-    (containerId: string, cellId: CellId, direction: "up" | "down") => {
-      const container = findElementById(cellCollection, containerId);
-      if (!container || container.type !== "row") {
-        console.error(`Container with id ${containerId} not found`);
-        return;
-      }
-
-      const index = container.children.indexOf(cellId);
-      if (index === -1) {
-        console.error(
-          `Cell with id ${cellId} not found in container ${containerId}`,
-          cellCollection
-        );
-        return;
-      }
-
-      setCellCollection((prev) => {
-        const targetRow = findElementById(prev, containerId) as CellRow;
-        const newChildren = targetRow.children;
-
-        if (direction === "up") {
-          // TODO coordinates
-          newChildren[index] = generateColumn([
-            generateRow([addNewCell()]),
-            generateRow([cellId]),
-          ]);
-        } else {
-          newChildren[index] = generateColumn([
-            generateRow([cellId]),
-            generateRow([addNewCell()]),
-          ]);
-        }
-
-        targetRow.children = newChildren;
-        return updateCollection(prev, targetRow);
-      });
-    },
-    [cellCollection]
-  );
-
   const addToRow = useCallback(
     (containerId: string, cellId: CellId, direction: Direction) => {
-      switch (direction) {
-        case "up":
-        case "down": {
-          addVerticalToRow(containerId, cellId, direction);
-          break;
-        }
-        case "left":
-        case "right": {
-          addHorizontalToRow(containerId, cellId, direction);
-          break;
+      setCellCollection((prev) => {
+        const container = findElementById(prev, containerId);
+        if (!container || container.type !== "row") {
+          console.error(`Container with id ${containerId} not found`);
+          return prev;
         }
 
-        default: {
-          direction satisfies never;
+        const newChildren = container.children;
+
+        const index = newChildren.indexOf(cellId);
+        if (index === -1) {
+          console.error(
+            `Cell with id ${cellId} not found in container ${containerId}`,
+            cellCollection
+          );
+          return prev;
         }
-      }
+
+        // TODO coordinates
+        switch (direction) {
+          case "up": {
+            newChildren[index] = generateColumn([
+              generateRow([addNewCell()]),
+              generateRow([cellId]),
+            ]);
+
+            break;
+          }
+          case "down": {
+            newChildren[index] = generateColumn([
+              generateRow([cellId]),
+              generateRow([addNewCell()]),
+            ]);
+
+            break;
+          }
+          case "left": {
+            newChildren.splice(index, 0, addNewCell());
+            break;
+          }
+          case "right": {
+            newChildren.splice(index + 1, 0, addNewCell());
+            break;
+          }
+
+          default: {
+            direction satisfies never;
+          }
+        }
+
+        container.children = newChildren;
+        return updateCollection(prev, container);
+      });
     },
     []
   );
