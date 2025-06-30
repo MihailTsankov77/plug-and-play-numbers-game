@@ -10,41 +10,14 @@ import { useCellsPossibleConnections } from "../../hooks/useCellsPossibleConnect
 import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
 import { CellConnections } from "../cell.connections/CellConnetions";
 import { Connection, ConnectionEvent } from "../../types/Connections";
+import { useConnectionState } from "../../hooks/useConnectionState";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cells, setters } = useCellState(() => [
     [generateEmptyCell({ x: 0, y: 0 })],
   ]);
 
-  const [connections, setConnections] = useState<Connection[]>([]);
-
-  const addConnection = useCallback((connection: ConnectionEvent) => {
-    setConnections((prevConnections) => {
-      if (connection.delete) {
-        return prevConnections.filter(
-          (conn) =>
-            !(
-              (conn.from === connection.from && conn.to === connection.to) ||
-              (conn.from === connection.to && conn.to === connection.from)
-            )
-        );
-      }
-
-      if (
-        prevConnections.some(
-          (conn) => conn.from === connection.from && conn.to === connection.to
-        )
-      ) {
-        return prevConnections;
-      }
-
-      const filteredConnections = prevConnections.filter(
-        (conn) => conn.from !== connection.to || conn.to !== connection.from
-      );
-
-      return [...filteredConnections, connection];
-    });
-  }, []);
+  const { connections, addConnection } = useConnectionState();
 
   const possibleConnection = useCellsPossibleConnections(cells);
 
