@@ -36,18 +36,34 @@ export function useCellsPossibleConnections(
           cellA.x < cellB.x + cellB.width && cellA.x + cellA.width > cellB.x;
 
         if (isHorizontallyAdjacent && hasHorizontalOverlap) {
+          const middleY =
+            (Math.max(cellA.y, cellB.y) +
+              Math.min(cellA.y + cellA.height, cellB.y + cellB.height)) /
+            2;
+          const middleX =
+            cellA.x < cellB.x ? cellA.x + cellA.width : cellB.x + cellB.width;
+
           connections.push({
             from: cellA.id,
             to: cellB.id,
             direction: "horizontal",
+            coordinates: { x: middleX, y: middleY },
           });
         }
 
         if (isVerticallyAdjacent && hasVerticalOverlap) {
+          const middleX =
+            (Math.max(cellA.x, cellB.x) +
+              Math.min(cellA.x + cellA.width, cellB.x + cellB.width)) /
+            2;
+          const middleY =
+            cellA.y < cellB.y ? cellA.y + cellA.height : cellB.y + cellB.height;
+
           connections.push({
             from: cellA.id,
             to: cellB.id,
             direction: "vertical",
+            coordinates: { x: middleX, y: middleY },
           });
         }
       }

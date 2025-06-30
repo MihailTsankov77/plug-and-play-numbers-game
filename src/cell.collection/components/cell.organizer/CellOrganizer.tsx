@@ -37,7 +37,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
           {/* <RowExpander onPress={setters.top} disabled={disableAddRow} /> */}
 
           <CellDimensionsProvider>
-            <div className="cell-container" /*ref={containerRef}*/>
+            <div className="cell-container">
               <CellBlock
                 cellCollection={cellCollection}
                 cellsById={cellsById}
@@ -52,13 +52,11 @@ export const CellOrganizer = memo(function CellOrganizer() {
         {/* <ColumnExpander onPress={setters.right} disabled={disableAddColumn} /> */}
       </div>
 
-      {/* <CellConnections
-        cells={cells}
+      <CellConnections
         possibleConnections={possibleConnection}
-        cellConfigDimensions={dimensions}
         connections={connections}
         addConnection={addConnection}
-      /> */}
+      />
     </>
   );
 });

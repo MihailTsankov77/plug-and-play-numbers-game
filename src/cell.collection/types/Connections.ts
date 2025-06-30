@@ -1,3 +1,5 @@
+import { Coordinates } from "./Dimensions";
+
 export type Connection = {
   from: string;
   to: string;
@@ -5,6 +7,7 @@ export type Connection = {
 
 export type PossibleConnection = Connection & {
   direction: "horizontal" | "vertical";
+  coordinates: Coordinates;
 };
 
 export type ConnectionEvent = Connection & {

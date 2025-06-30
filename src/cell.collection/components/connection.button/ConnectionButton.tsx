@@ -1,5 +1,4 @@
 import { memo } from "react";
-import { Coordinates } from "../../types/Dimensions";
 import {
   Connection,
   ConnectionEvent,
@@ -10,7 +9,6 @@ import "./ConnectionButton.css";
 type ConnectionState = "inactive" | "left" | "right";
 
 export const ConnectionButton = memo(function ConnectionButton(props: {
-  coordinates: Coordinates;
   possibleConnection: PossibleConnection;
   connections: Connection[];
   addConnection: (connection: ConnectionEvent) => void;
@@ -60,13 +58,15 @@ export const ConnectionButton = memo(function ConnectionButton(props: {
     }
   };
 
+  const coordinates = props.possibleConnection.coordinates;
+
   return (
     <div
       className="connection-button-container"
       style={{
         position: "absolute",
-        left: `${props.coordinates.x}px`,
-        top: `${props.coordinates.y}px`,
+        left: `${coordinates.x}px`,
+        top: `${coordinates.y}px`,
       }}
     >
       <div className={`connection-button ${state}`} onClick={onPress}>
