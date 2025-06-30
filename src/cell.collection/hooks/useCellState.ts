@@ -1,93 +1,140 @@
-import { useCallback, useState } from "react";
-import { CellConfig } from "../types/Cell";
+import { use, useCallback, useMemo, useState } from "react";
+import { CellConfig, CellId } from "../types/Cell";
 import { generateEmptyCell } from "../utils/generateCell";
 import { MaxNumberOfCells } from "../constants/CellLimits";
+import { Direction } from "../types/Dimensions";
 
-export function useCellState(initStateFn: () => CellConfig[][]): {
-  cells: CellConfig[][];
+type Row = {
+  id: string;
+  type: "row";
+  children: (CellId | Column)[];
+};
+
+type Column = {
+  id: string;
+  type: "column";
+  children: Row[];
+};
+
+type CellCollection = Row | Column;
+
+function generateRow(children: (CellId | Column)[]): Row {
+  return {
+    id: crypto.randomUUID(),
+    type: "row",
+    children,
+  };
+}
+
+function generateColumn(children: Row[]): Column {
+  return {
+    id: crypto.randomUUID(),
+    type: "column",
+    children,
+  };
+}
+
+function findElementById<Type extends "row" | "column">(
+  type: Type,
+  collection: CellCollection,
+  id: string
+): (CellCollection & { type: Type }) | undefined {
+  if (collection.type === type && collection.id === id) {
+    return collection as CellCollection & { type: Type };
+  }
+
+  for (const child of collection.children) {
+    if (typeof child === "string") continue;
+    const found = findElementById(type, child, id);
+    if (found) return found;
+  }
+}
+
+export function useCellState(initStateFn: () => CellConfig): {
+  cellCollection: CellCollection;
+  cellsById: Record<string, CellConfig>;
   setters: {
-    top: () => void;
-    bottom: () => void;
-    left: () => void;
-    right: () => void;
+    addToRow: (id: string, direction: Direction) => void;
+    addToColumn: (id: string, direction: Direction) => void;
   };
 } {
-  const [cells, setCells] = useState<CellConfig[][]>(initStateFn);
+  const [initCell] = useState(initStateFn);
+  const [cellCollection, setCellCollection] = useState<CellCollection>(() =>
+    generateRow([initCell.id])
+  );
+  const [cellsById, setCellsById] = useState<Record<string, CellConfig>>({
+    [initCell.id]: initCell,
+  });
 
-  const addRow = useCallback((direction: "top" | "bottom") => {
-    setCells((prevGrid) => {
-      if (prevGrid.length >= MaxNumberOfCells.rows) {
-        return prevGrid;
-      }
+  const addToRow = useCallback((id: string, direction: Direction) => {
+    setCellCollection((prevCollection) => {
+      const row = findElementById("row", prevCollection, id);
 
-      const y = direction === "top" ? 0 : prevGrid.length;
+      if (!row) return prevCollection;
 
-      const newRow: CellConfig[] = prevGrid[0].map((cell) =>
-        generateEmptyCell({ y, x: cell.dimensions.x })
-      );
-
-      if (direction === "top") {
-        const modifyPrevGrid = prevGrid.map((row) =>
-          row.map((cell) => ({
-            ...cell,
-            dimensions: {
-              ...cell.dimensions,
-              y: cell.dimensions.y + 1,
-            },
-          }))
-        );
-
-        return [newRow, ...modifyPrevGrid];
-      }
-
-      return [...prevGrid, newRow];
-    });
-  }, []);
-
-  const addColumn = useCallback((direction: "left" | "right") => {
-    setCells((prevGrid) => {
-      if (prevGrid[0].length >= MaxNumberOfCells.columns) {
-        return prevGrid;
-      }
-
-      return prevGrid.map((row) => {
-        const newCell: CellConfig = generateEmptyCell({
-          x: direction === "left" ? 0 : row.length,
-          y: row[0].dimensions.y,
-        });
-
-        if (direction === "left") {
-          const modifyPrevRow = row.map((cell) => ({
-            ...cell,
-            dimensions: {
-              ...cell.dimensions,
-              x: cell.dimensions.x + 1,
-            },
-          }));
-
-          return [newCell, ...modifyPrevRow];
+      switch (direction) {
+        case "up": {
+          break;
+        }
+        case "down": {
+          break;
+        }
+        case "left": {
+          break;
+        }
+        case "right": {
+          break;
         }
 
-        return [...row, newCell];
-      });
+        default: {
+          direction satisfies never;
+        }
+      }
+
+      return prevCollection;
     });
   }, []);
 
-  const handleAddRowTop = useCallback(() => addRow("top"), [addRow]);
-  const handleAddRowBottom = useCallback(() => addRow("bottom"), [addRow]);
-  const handleAddColumnLeft = useCallback(() => addColumn("left"), [addColumn]);
-  const handleAddColumnRight = useCallback(
-    () => addColumn("right"),
-    [addColumn]
+  const addToColumn = useCallback((id: string, direction: Direction) => {
+    setCellCollection((prevCollection) => {
+      const column = findElementById("column", prevCollection, id);
+
+      if (!column) return prevCollection;
+
+      switch (direction) {
+        case "up": {
+          break;
+        }
+        case "down": {
+          break;
+        }
+        case "left": {
+          break;
+        }
+        case "right": {
+          break;
+        }
+
+        default: {
+          direction satisfies never;
+        }
+      }
+
+      return prevCollection;
+    });
+  }, []);
+
+  const setters = useMemo(
+    () => ({
+      addToRow,
+      addToColumn,
+    }),
+    [addToRow, addToColumn]
   );
 
   return {
-    cells,
-    setters: {
-      top: handleAddRowTop,
-      bottom: handleAddRowBottom,
-      left: handleAddColumnLeft,
-      right: handleAddColumnRight,
-    },
+    cellCollection,
+    cellsById,
+    setters,
   };
 }

@@ -16,9 +16,9 @@ export const Cell = memo(function Cell(props: CellConfig) {
       <div className="cell-container-2">
         <AddCellButton direction="left" addCell={onPress} />
         <div className="cell">
-          <AddButton animated />
-          {/* <div className="cell-id">ID: {props.id}</div>
-      x: {props.dimensions.x}, y: {props.dimensions.y} */}
+          {/* <AddButton animated /> */}
+          <div className="cell-id">ID: {props.id}</div>
+          x: {props.dimensions.x}, y: {props.dimensions.y}
         </div>
         <AddCellButton direction="right" addCell={onPress} />
       </div>

@@ -1,6 +1,8 @@
 import { Dimensions } from "./Dimensions";
 
+export type CellId = string;
+
 export type CellConfig = {
-  id: string;
+  id: CellId;
   dimensions: Dimensions;
 };
