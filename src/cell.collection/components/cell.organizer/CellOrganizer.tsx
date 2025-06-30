@@ -11,13 +11,18 @@ import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
 import { CellConnections } from "../cell.connections/CellConnetions";
 import { Connection, ConnectionEvent } from "../../types/Connections";
 import { useConnectionState } from "../../hooks/useConnectionState";
+import { useCellsDimensions } from "../../hooks/useCellsDimensions";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cellCollection, cellsById, addCell } = useCellState(() =>
     generateEmptyCell({ x: 0, y: 0 })
   );
 
-  const { connections, addConnection } = useConnectionState();
+  const { cellDimensions, CellDimensionsProvider } = useCellsDimensions();
+
+  console.log("Cell dimensions:", cellDimensions);
+
+  // const { connections, addConnection } = useConnectionState();
 
   // TODO uncomment
   // const possibleConnection = useCellsPossibleConnections(cells);
@@ -37,13 +42,15 @@ export const CellOrganizer = memo(function CellOrganizer() {
         <div className="cell-organizer-2">
           {/* <RowExpander onPress={setters.top} disabled={disableAddRow} /> */}
 
-          <div className="cell-container" /*ref={containerRef}*/>
-            <CellBlock
-              cellCollection={cellCollection}
-              cellsById={cellsById}
-              addCell={addCell}
-            />
-          </div>
+          <CellDimensionsProvider>
+            <div className="cell-container" /*ref={containerRef}*/>
+              <CellBlock
+                cellCollection={cellCollection}
+                cellsById={cellsById}
+                addCell={addCell}
+              />
+            </div>
+          </CellDimensionsProvider>
 
           {/* <RowExpander onPress={setters.bottom} disabled={disableAddRow} /> */}
         </div>
