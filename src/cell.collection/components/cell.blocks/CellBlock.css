@@ -1,0 +1,11 @@
+.cell-row {
+  display: flex;
+  flex-direction: row;
+  flex:1;
+}
+
+.cell-column {
+  display: flex;
+  flex-direction: column;
+  flex:1;
+}

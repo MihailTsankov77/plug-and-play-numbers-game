@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from "react";
 import "./CellOrganizer.css";
-import { CellRow } from "../cell.row/CellRow";
+import { CellBlock } from "../cell.blocks/CellBlock";
 import { ColumnExpander } from "../column.expander/ColumnExpander";
 import { RowExpander } from "../row.expander/RowExpander";
 import { generateEmptyCell } from "../../utils/generateCell";
@@ -37,10 +37,8 @@ export const CellOrganizer = memo(function CellOrganizer() {
         <div className="cell-organizer-2">
           {/* <RowExpander onPress={setters.top} disabled={disableAddRow} /> */}
 
-           <div className="cell-container" {/*ref={containerRef}*/}> 
-            {cells.map((cellsPerRow, index) => (
-              <CellRow key={index} cells={cellsPerRow} />
-            ))}
+          <div className="cell-container" /*ref={containerRef}*/>
+            <CellBlock cellCollection={cellCollection} cellsById={cellsById} />
           </div>
 
           {/* <RowExpander onPress={setters.bottom} disabled={disableAddRow} /> */}
@@ -49,13 +47,13 @@ export const CellOrganizer = memo(function CellOrganizer() {
         {/* <ColumnExpander onPress={setters.right} disabled={disableAddColumn} /> */}
       </div>
 
-      <CellConnections
+      {/* <CellConnections
         cells={cells}
         possibleConnections={possibleConnection}
         cellConfigDimensions={dimensions}
         connections={connections}
         addConnection={addConnection}
-      />
+      /> */}
     </>
   );
 });

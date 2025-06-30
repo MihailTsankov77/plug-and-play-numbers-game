@@ -1,24 +1,9 @@
-import { use, useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { CellConfig, CellId } from "../types/Cell";
-import { generateEmptyCell } from "../utils/generateCell";
-import { MaxNumberOfCells } from "../constants/CellLimits";
 import { Direction } from "../types/Dimensions";
+import { CellCollection, CellColumn, CellRow } from "../types/CellCollection";
 
-type Row = {
-  id: string;
-  type: "row";
-  children: (CellId | Column)[];
-};
-
-type Column = {
-  id: string;
-  type: "column";
-  children: Row[];
-};
-
-type CellCollection = Row | Column;
-
-function generateRow(children: (CellId | Column)[]): Row {
+function generateRow(children: (CellId | CellColumn)[]): CellRow {
   return {
     id: crypto.randomUUID(),
     type: "row",
@@ -26,7 +11,7 @@ function generateRow(children: (CellId | Column)[]): Row {
   };
 }
 
-function generateColumn(children: Row[]): Column {
+function generateColumn(children: CellRow[]): CellColumn {
   return {
     id: crypto.randomUUID(),
     type: "column",
