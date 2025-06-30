@@ -7,7 +7,9 @@ import {
   ElementType,
   TypeOption,
 } from "../../../elements/components/radio.selector/RadioSelector";
-import { RandomNumbersGenerator } from "../../../elements/components/generators/random.number.generator/RandomNumbersGenerator";
+import { RandomNumbersGenerator } from "../../../elements/components/generators/RandomNumbersGenerator";
+import { SumTransformator } from "../../../elements/components/transformators/Sum";
+import { MultiplyTransformator } from "../../../elements/components/transformators/Multiply";
 
 export const Cell = memo(function Cell(props: {
   config: CellConfig;
@@ -56,9 +58,11 @@ const getElement = (type: ElementType, option: TypeOption) => {
   } else if (type === "transformator") {
     switch (option) {
       case "Plus 5":
-        return <div>Plus 5 Transformator</div>;
+        // TODO: Implement input
+        return <SumTransformator sumWith={5} input={5} />;
       case "Multiply by 2":
-        return <div>Multiply by 2 Transformator</div>;
+        // TODO: Implement input
+        return <MultiplyTransformator factor={2} input={5} />;
       default:
         return null;
     }

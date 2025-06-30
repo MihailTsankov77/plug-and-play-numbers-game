@@ -1,11 +1,11 @@
-.rng-wrapper {
+.wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1rem;
 }
 
-.rng-title {
+.title {
   margin: 0;
   font-size: 1.2rem;
   color: #434242;
@@ -23,7 +23,7 @@
   transition: all 0.2s ease-in-out;
 }
 
-.rng-button {
+.button {
   padding: 0.6rem 1.2rem;
   font-size: 1rem;
   border: none;
@@ -33,6 +33,6 @@
   cursor: pointer;
 }
 
-.rng-button:hover {
+.button:hover {
   background-color: #242424;
 }
