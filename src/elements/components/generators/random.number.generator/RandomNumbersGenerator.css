@@ -1,0 +1,38 @@
+.rng-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.rng-title {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #434242;
+}
+
+.number-box {
+  font-size: 4rem;
+  font-weight: bold;
+  padding: 0.5rem 1.5rem;
+  background-color: #d2d3d6;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  color: #242424;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+}
+
+.rng-button {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  border: none;
+  background-color: #434242;
+  color: white;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+.rng-button:hover {
+  background-color: #242424;
+}
