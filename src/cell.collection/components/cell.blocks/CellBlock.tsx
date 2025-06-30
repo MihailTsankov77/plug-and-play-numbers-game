@@ -53,11 +53,19 @@ const Row = memo(function Row(props: CellRow & CommonProps) {
 });
 
 const Column = memo(function Column(props: CellColumn & CommonProps) {
+  const addCell = (cellId: CellId, direction: Direction) => {
+    props.addCell(props.id, cellId, direction);
+  };
+
   return (
     <div className="cell-column">
-      {props.children.map((row) => (
-        <Row key={row.id} {...props} {...row} />
-      ))}
+      {props.children.map((row) =>
+        typeof row === "string" ? (
+          <Cell key={row} {...props.cellsById[row]} addCell={addCell} />
+        ) : (
+          <Row key={row.id} {...props} {...row} />
+        )
+      )}
     </div>
   );
 });

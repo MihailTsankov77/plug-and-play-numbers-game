@@ -9,7 +9,7 @@ export type CellRow = {
 export type CellColumn = {
   id: string;
   type: "column";
-  children: CellRow[];
+  children: (CellId | CellRow)[];
 };
 
 export type CellCollection = CellRow | CellColumn;

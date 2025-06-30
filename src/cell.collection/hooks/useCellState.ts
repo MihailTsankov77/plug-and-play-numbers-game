@@ -4,7 +4,7 @@ import { Direction } from "../types/Dimensions";
 import { CellCollection, CellColumn, CellRow } from "../types/CellCollection";
 import { generateEmptyCell } from "../utils/generateCell";
 
-function generateRow(children: (CellId | CellColumn)[]): CellRow {
+function generateRow(children: CellId[]): CellRow {
   return {
     id: crypto.randomUUID(),
     type: "row",
@@ -12,7 +12,7 @@ function generateRow(children: (CellId | CellColumn)[]): CellRow {
   };
 }
 
-function generateColumn(children: CellRow[]): CellColumn {
+function generateColumn(children: CellId[]): CellColumn {
   return {
     id: crypto.randomUUID(),
     type: "column",
@@ -51,7 +51,13 @@ function updateCollection(
   return { ...collection, children: newChildren as any };
 }
 
-// TODO maybe improve this so that columns can accept cells as children it will flatten the structure
+const TransformDirectionsForColumn: Record<Direction, Direction> = {
+  up: "left",
+  down: "right",
+  left: "up",
+  right: "down",
+};
+
 export function useCellState(initStateFn: () => CellConfig): {
   cellCollection: CellCollection;
   cellsById: Record<string, CellConfig>;
@@ -72,11 +78,11 @@ export function useCellState(initStateFn: () => CellConfig): {
     return newCell.id;
   }, []);
 
-  const addToRow = useCallback(
-    (containerId: string, cellId: CellId, direction: Direction) => {
+  const addCell = useCallback(
+    (containerId: string, cellId: CellId, _direction: Direction) => {
       setCellCollection((prev) => {
         const container = findElementById(prev, containerId);
-        if (!container || container.type !== "row") {
+        if (!container) {
           console.error(`Container with id ${containerId} not found`);
           return prev;
         }
@@ -92,21 +98,23 @@ export function useCellState(initStateFn: () => CellConfig): {
           return prev;
         }
 
+        const direction =
+          container.type === "column"
+            ? TransformDirectionsForColumn[_direction]
+            : _direction;
+
+        const generator =
+          container.type === "column" ? generateRow : generateColumn;
+
         // TODO coordinates
         switch (direction) {
           case "up": {
-            newChildren[index] = generateColumn([
-              generateRow([addNewCell()]),
-              generateRow([cellId]),
-            ]);
+            newChildren[index] = generator([addNewCell(), cellId]);
 
             break;
           }
           case "down": {
-            newChildren[index] = generateColumn([
-              generateRow([cellId]),
-              generateRow([addNewCell()]),
-            ]);
+            newChildren[index] = generator([cellId, addNewCell()]);
 
             break;
           }
@@ -134,6 +142,6 @@ export function useCellState(initStateFn: () => CellConfig): {
   return {
     cellCollection,
     cellsById,
-    addCell: addToRow,
+    addCell,
   };
 }
