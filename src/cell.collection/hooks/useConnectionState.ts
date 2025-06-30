@@ -1,7 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Connection, ConnectionEvent } from "../types/Connections";
 
-export function useConnectionState(): {
+export function useConnectionState(possibleConnections: ConnectionEvent[]): {
   connections: Connection[];
   addConnection: (connection: ConnectionEvent) => void;
 } {
@@ -34,6 +34,19 @@ export function useConnectionState(): {
       return [...filteredConnections, connection];
     });
   }, []);
+
+  useEffect(() => {
+    const validConnections = connections.filter((connection) =>
+      possibleConnections.some(
+        (possible) =>
+          (possible.from === connection.from &&
+            possible.to === connection.to) ||
+          (possible.from === connection.to && possible.to === connection.from)
+      )
+    );
+
+    setConnections(validConnections);
+  }, [possibleConnections]);
 
   return {
     connections,

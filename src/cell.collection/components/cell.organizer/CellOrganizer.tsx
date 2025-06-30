@@ -5,13 +5,17 @@ import { useCellState } from "../../hooks/useCellState";
 import { CellConnections } from "../cell.connections/CellConnections";
 import { useConnectionState } from "../../hooks/useConnectionState";
 import { useCellsDimensions } from "../../hooks/useCellsDimensions";
+import { useCellsPossibleConnections } from "../../hooks/useCellsPossibleConnections";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cellCollection, addCell } = useCellState();
 
   const { cellDimensions, CellDimensionsProvider } = useCellsDimensions();
 
-  const { connections, addConnection } = useConnectionState();
+  const possibleConnections = useCellsPossibleConnections(cellDimensions);
+
+  const { connections, addConnection } =
+    useConnectionState(possibleConnections);
 
   return (
     <>
@@ -22,7 +26,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
       </div>
 
       <CellConnections
-        cellDimensions={cellDimensions}
+        possibleConnections={possibleConnections}
         connections={connections}
         addConnection={addConnection}
       />
