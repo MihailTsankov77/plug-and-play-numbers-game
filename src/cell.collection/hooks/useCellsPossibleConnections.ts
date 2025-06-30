@@ -1,45 +1,58 @@
 import { useMemo } from "react";
-import { CellConfig } from "../types/Cell";
+import { CellId } from "../types/Cell";
 import { PossibleConnection } from "../types/Connections";
+import { Dimensions } from "../types/Dimensions";
 
-// TODO: rework to use width and height from CellConfig
+const EPSILON = 0.1;
+
 export function useCellsPossibleConnections(
-  cells: CellConfig[][]
+  cellDimensions: Record<CellId, Dimensions>
 ): PossibleConnection[] {
   return useMemo(() => {
     const connections: PossibleConnection[] = [];
 
-    cells.forEach((row, y) => {
-      row.forEach((cell, x) => {
-        const cellId = cell.id;
+    const cells = Object.entries(cellDimensions).map(([id, dimensions]) => ({
+      id,
+      ...dimensions,
+    }));
 
-        // Check only bottom and right neighbors, because the other are already checked
-        // from the previous cells
-        const directions = [
-          [0, 1], // right
-          [1, 0], // down
-        ];
+    for (let i = 0; i < cells.length; i++) {
+      const cellA = cells[i];
 
-        for (const [dy, dx] of directions) {
-          const neighborY = y + dy;
-          const neighborX = x + dx;
+      for (let j = i + 1; j < cells.length; j++) {
+        const cellB = cells[j];
 
-          if (
-            neighborY >= 0 &&
-            neighborY < cells.length &&
-            neighborX >= 0 &&
-            neighborX < cells[neighborY].length
-          ) {
-            connections.push({
-              from: cellId,
-              to: cells[neighborY][neighborX].id,
-              direction: dy === 0 ? "horizontal" : "vertical",
-            });
-          }
+        const isHorizontallyAdjacent =
+          Math.abs(cellA.x + cellA.width - cellB.x) < EPSILON ||
+          Math.abs(cellB.x + cellB.width - cellA.x) < EPSILON;
+        const isVerticallyAdjacent =
+          Math.abs(cellA.y + cellA.height - cellB.y) < EPSILON ||
+          Math.abs(cellB.y + cellB.height - cellA.y) < EPSILON;
+
+        const hasHorizontalOverlap =
+          cellA.y < cellB.y + cellB.height && cellA.y + cellA.height > cellB.y;
+
+        const hasVerticalOverlap =
+          cellA.x < cellB.x + cellB.width && cellA.x + cellA.width > cellB.x;
+
+        if (isHorizontallyAdjacent && hasHorizontalOverlap) {
+          connections.push({
+            from: cellA.id,
+            to: cellB.id,
+            direction: "horizontal",
+          });
         }
-      });
-    });
+
+        if (isVerticallyAdjacent && hasVerticalOverlap) {
+          connections.push({
+            from: cellA.id,
+            to: cellB.id,
+            direction: "vertical",
+          });
+        }
+      }
+    }
 
     return connections;
-  }, [cells]);
+  }, [cellDimensions]);
 }

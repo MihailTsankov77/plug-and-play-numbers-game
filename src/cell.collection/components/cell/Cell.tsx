@@ -35,18 +35,20 @@ export const Cell = memo(function Cell(
   }, []);
 
   return (
-    <div className="cell-container-1" ref={containerRef}>
-      <AddCellButton direction="up" addCell={onPress} />
-      <div className="cell-container-2">
-        <AddCellButton direction="left" addCell={onPress} />
-        <div className="cell">
-          {/* <AddButton animated /> */}
-          <div className="cell-id">ID: {props.id}</div>
-          x: {props.dimensions.x}, y: {props.dimensions.y}
+    <div className="cell-container-0" ref={containerRef}>
+      <div className="cell-container-1">
+        <AddCellButton direction="up" addCell={onPress} />
+        <div className="cell-container-2">
+          <AddCellButton direction="left" addCell={onPress} />
+          <div className="cell">
+            {/* <AddButton animated /> */}
+            <div className="cell-id">ID: {props.id}</div>
+            x: {props.dimensions.x}, y: {props.dimensions.y}
+          </div>
+          <AddCellButton direction="right" addCell={onPress} />
         </div>
-        <AddCellButton direction="right" addCell={onPress} />
+        <AddCellButton direction="down" addCell={onPress} />
       </div>
-      <AddCellButton direction="down" addCell={onPress} />
     </div>
   );
 });

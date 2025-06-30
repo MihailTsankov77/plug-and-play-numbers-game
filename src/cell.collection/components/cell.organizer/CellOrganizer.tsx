@@ -7,7 +7,6 @@ import { generateEmptyCell } from "../../utils/generateCell";
 import { MaxNumberOfCells } from "../../constants/CellLimits";
 import { useCellState } from "../../hooks/useCellState";
 import { useCellsPossibleConnections } from "../../hooks/useCellsPossibleConnections";
-import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
 import { CellConnections } from "../cell.connections/CellConnetions";
 import { Connection, ConnectionEvent } from "../../types/Connections";
 import { useConnectionState } from "../../hooks/useConnectionState";
@@ -20,14 +19,9 @@ export const CellOrganizer = memo(function CellOrganizer() {
 
   const { cellDimensions, CellDimensionsProvider } = useCellsDimensions();
 
-  console.log("Cell dimensions:", cellDimensions);
+  const possibleConnection = useCellsPossibleConnections(cellDimensions);
 
-  // const { connections, addConnection } = useConnectionState();
-
-  // TODO uncomment
-  // const possibleConnection = useCellsPossibleConnections(cells);
-
-  // const { containerRef, dimensions } = useCellsDimensionConfig(cells);
+  const { connections, addConnection } = useConnectionState();
 
   // TODO Clean up RowExpander and ColumnExpander
   // TODO reimplement the disabled logic
