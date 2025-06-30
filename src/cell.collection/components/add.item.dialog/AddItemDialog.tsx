@@ -1,25 +1,23 @@
 import { Dialog } from "../../../common/components/dialog/Dialog";
 import {
   RadioSelector,
+  ElementType,
   TypeOption,
 } from "../../../elements/components/radio.selector/RadioSelector";
 
 export const AddItemDialog = ({
   open,
   onClose,
-  cellId,
+  onAdd,
 }: {
   open: boolean;
   onClose: () => void;
-  cellId: string;
+  onAdd: (type: ElementType, option: TypeOption) => void;
 }) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <RadioSelector
-        onSubmit={(type: TypeOption, option: string) => {
-          alert(`Selected: ${type} - ${option} for Cell ID: ${cellId}`);
-          onClose();
-        }}
+        onSubmit={onAdd}
       />
     </Dialog>
   );

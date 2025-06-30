@@ -11,6 +11,8 @@ import { useCellsDimensionConfig } from "../../hooks/useCellsDimensionConfig";
 import { CellConnections } from "../cell.connections/CellConnetions";
 import { Connection, ConnectionEvent } from "../../types/Connections";
 import { useConnectionState } from "../../hooks/useConnectionState";
+import { ElementType, TypeOption } from "../../../elements/components/radio.selector/RadioSelector";
+import { useCellElements } from "../../hooks/useCellElements";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cells, setters } = useCellState(() => [
@@ -26,6 +28,12 @@ export const CellOrganizer = memo(function CellOrganizer() {
   const disableAddColumn = cells[0].length >= MaxNumberOfCells.columns;
   const disableAddRow = cells.length >= MaxNumberOfCells.rows;
 
+  const {
+    registerCell,
+    addElement,
+    getElementById,
+  } = useCellElements();
+
   return (
     <>
       <div className="cell-organizer-1">
@@ -36,7 +44,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
 
           <div className="cell-container" ref={containerRef}>
             {cells.map((cellsPerRow, index) => (
-              <CellRow key={index} cells={cellsPerRow} />
+              <CellRow key={index} cells={cellsPerRow} register={registerCell} addElement={addElement} getElementById={getElementById}/>
             ))}
           </div>
 
@@ -56,3 +64,4 @@ export const CellOrganizer = memo(function CellOrganizer() {
     </>
   );
 });
+
