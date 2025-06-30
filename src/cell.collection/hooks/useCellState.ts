@@ -72,7 +72,7 @@ export function useCellState(initStateFn: () => CellConfig): {
   });
 
   const addNewCell = useCallback(() => {
-    const newCell = generateEmptyCell({ x: 0, y: 0 });
+    const newCell = generateEmptyCell();
 
     setCellsById((prev) => ({ ...prev, [newCell.id]: newCell }));
     return newCell.id;
@@ -106,7 +106,6 @@ export function useCellState(initStateFn: () => CellConfig): {
         const generator =
           container.type === "column" ? generateRow : generateColumn;
 
-        // TODO coordinates
         switch (direction) {
           case "up": {
             newChildren[index] = generator([addNewCell(), cellId]);

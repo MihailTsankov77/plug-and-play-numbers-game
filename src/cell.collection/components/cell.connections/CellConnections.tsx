@@ -1,19 +1,19 @@
 import { memo } from "react";
-import {
-  Connection,
-  ConnectionEvent,
-  PossibleConnection,
-} from "../../types/Connections";
+import { Connection, ConnectionEvent } from "../../types/Connections";
 import { ConnectionButton } from "../connection.button/ConnectionButton";
+import { useCellsPossibleConnections } from "../../hooks/useCellsPossibleConnections";
+import { Dimensions } from "../../types/Dimensions";
 
 export const CellConnections = memo(function CellConnections(props: {
-  possibleConnections: PossibleConnection[];
+  cellDimensions: Record<string, Dimensions>;
   connections: Connection[];
   addConnection: (connection: ConnectionEvent) => void;
 }) {
+  const possibleConnections = useCellsPossibleConnections(props.cellDimensions);
+
   return (
     <>
-      {props.possibleConnections.map((possibleConnection, index) => (
+      {possibleConnections.map((possibleConnection, index) => (
         <ConnectionButton
           key={index}
           possibleConnection={possibleConnection}

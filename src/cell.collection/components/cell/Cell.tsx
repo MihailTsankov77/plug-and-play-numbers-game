@@ -4,6 +4,7 @@ import { CellConfig, CellId } from "../../types/Cell";
 import { AddCellButton } from "../add.cell.button/AddCellButton";
 import { Direction } from "../../types/Dimensions";
 import { useCellDimensionsContext } from "../../hooks/useCellsDimensions";
+import { AddButton } from "../add.button/AddButton";
 
 export const Cell = memo(function Cell(
   props: CellConfig & {
@@ -41,9 +42,7 @@ export const Cell = memo(function Cell(
         <div className="cell-container-2">
           <AddCellButton direction="left" addCell={onPress} />
           <div className="cell">
-            {/* <AddButton animated /> */}
-            <div className="cell-id">ID: {props.id}</div>
-            x: {props.dimensions.x}, y: {props.dimensions.y}
+            <AddButton animated />
           </div>
           <AddCellButton direction="right" addCell={onPress} />
         </div>
