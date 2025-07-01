@@ -1,11 +1,20 @@
-import { memo } from "react";
+import { memo, useCallback, useEffect } from "react";
 import "./CellBlock.css";
 import { Cell } from "../cell/Cell";
 import { CellId, CellCollection, CellColumn, CellRow } from "../../types/Cell";
 import { Direction } from "../../types/Dimensions";
+import {
+  ElementType,
+  TypeOption,
+} from "../../../elements/components/radio.selector/RadioSelector";
 
 type CommonProps = {
   addCell: (containerId: string, cellId: CellId, direction: Direction) => void;
+  register: (id: string) => void;
+  addElement: (id: string, type: ElementType, option: TypeOption) => void;
+  getElementById: (
+    id: string
+  ) => { id: string; type?: ElementType; option?: TypeOption } | undefined;
 };
 
 export const CellBlock = memo(function CellBlock(
@@ -33,11 +42,36 @@ const Row = memo(function Row(props: CellRow & CommonProps) {
     props.addCell(props.id, cellId, direction);
   };
 
+  useEffect(() => {
+    props.children
+      .filter((cell) => typeof cell === "string")
+      .forEach((cell) => {
+        props.register(cell);
+      });
+  }, [props.children, props.register]);
+
+  const getElement = useCallback(
+    (id: string) => {
+      const element = props.getElementById(id);
+      if (element?.option && element?.type) {
+        return { type: element.type, option: element.option };
+      }
+      return undefined;
+    },
+    [props.getElementById]
+  );
+
   return (
     <div className="cell-row">
       {props.children.map((child) =>
         typeof child === "string" ? (
-          <Cell key={child} id={child} addCell={addCell} />
+          <Cell
+            key={child}
+            id={child}
+            addCell={addCell}
+            addElement={props.addElement}
+            element={getElement(child)}
+          />
         ) : (
           <Column key={child.id} {...props} {...child} />
         )
@@ -51,11 +85,36 @@ const Column = memo(function Column(props: CellColumn & CommonProps) {
     props.addCell(props.id, cellId, direction);
   };
 
+  useEffect(() => {
+    props.children
+      .filter((cell) => typeof cell === "string")
+      .forEach((cell) => {
+        props.register(cell);
+      });
+  }, [props.children, props.register]);
+
+  const getElement = useCallback(
+    (id: string) => {
+      const element = props.getElementById(id);
+      if (element?.option && element?.type) {
+        return { type: element.type, option: element.option };
+      }
+      return undefined;
+    },
+    [props.getElementById]
+  );
+
   return (
     <div className="cell-column">
       {props.children.map((child) =>
         typeof child === "string" ? (
-          <Cell key={child} id={child} addCell={addCell} />
+          <Cell
+            key={child}
+            id={child}
+            addCell={addCell}
+            addElement={props.addElement}
+            element={getElement(child)}
+          />
         ) : (
           <Row key={child.id} {...props} {...child} />
         )

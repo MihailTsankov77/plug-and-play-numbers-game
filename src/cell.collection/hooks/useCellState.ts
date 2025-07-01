@@ -121,7 +121,7 @@ export function useCellState(): {
   );
 
   const cellCollection = useMemo(() => {
-    return { ...cellCollectionRef.current };
+    return JSON.parse(JSON.stringify(cellCollectionRef.current));
   }, [refChange]);
 
   return {
