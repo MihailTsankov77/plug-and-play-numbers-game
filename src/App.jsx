@@ -3,7 +3,7 @@ import {CellOrganizer} from "./cell.collection/components/cell.organizer/CellOrg
 import {CellElementsProvider} from "./cell.collection/contextes/CellElementsContext";
 
 function App() {
-  return <CellOrganizer/> 
+     return <CellElementsProvider><CellOrganizer/> </CellElementsProvider>
 }
 
 export default App

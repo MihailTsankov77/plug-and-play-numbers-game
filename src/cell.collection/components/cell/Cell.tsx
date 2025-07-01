@@ -10,7 +10,7 @@ import {
   TypeOption,
 } from "../../../elements/components/radio.selector/RadioSelector";
 import { AddItemDialog } from "../add.item.dialog/AddItemDialog";
-import { Element } from "../../../elements/utils/getElement";
+import { Element } from "../../../elements/utils/Element";
 import { useCellElementsContext } from "../../contextes/CellElementsContext";
 
 export const Cell = memo(function Cell(props: {
@@ -18,7 +18,7 @@ export const Cell = memo(function Cell(props: {
   addCell: (cellId: CellId, direction: Direction) => void;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-   const { addElement, cellElements  } = useCellElementsContext();
+  const { addElement, cellElements } = useCellElementsContext();
 
   const { setDimensions } = useCellDimensionsContext();
 
@@ -85,4 +85,3 @@ export const Cell = memo(function Cell(props: {
     </div>
   );
 });
-

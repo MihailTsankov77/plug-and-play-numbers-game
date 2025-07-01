@@ -6,12 +6,16 @@ const typeOptions = ["generator", "transformator"] as const;
 export type ElementType = (typeof typeOptions)[number];
 
 const generatorOptions = ["Random Number", "Something Else"] as const;
-const transformatorOptions = ["Plus 5", "Multiply by 2", "Delay 5 Seconds"] as const;
+const transformatorOptions = [
+  "Plus 5",
+  "Multiply by 2",
+  "Delay 5 Seconds",
+] as const;
 
-const options = [
-  ...generatorOptions,
-  ...transformatorOptions,
-]
+export type GeneratorOption = (typeof generatorOptions)[number];
+export type TransformatorOption = (typeof transformatorOptions)[number];
+
+const options = [...generatorOptions, ...transformatorOptions];
 export type TypeOption = (typeof options)[number];
 
 export const RadioSelector = ({
