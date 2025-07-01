@@ -24,11 +24,13 @@ export const CellOrganizer = memo(function CellOrganizer() {
 
   const { generatorElements, cellElements } = useCellElementsContext();
 
-  const { triggerCalculation } = useCellsCalculate({
+  const { triggerCalculation, values } = useCellsCalculate({
     connections,
     generatorElements,
     cellElements,
   });
+
+  console.log("CellOrganizer render", values);
 
   return (
     <>

@@ -1,5 +1,4 @@
 import { elementToFunctionMap } from "../../elements/utils/functionToElement";
-import { CellId } from "../types/Cell";
 import { Connection } from "../types/Connections";
 import {
   ElementType,
@@ -28,6 +27,9 @@ export const useCellsCalculate = ({
     console.log("Initial array:", array);
 
     calculate({ array });
+
+    console.log("Final values:", values);
+    console.log("Connections:", connections);
   };
 
   const calculate = async ({
@@ -36,20 +38,13 @@ export const useCellsCalculate = ({
     array: { id: string; connections_count: number; inputs: number[] }[];
   }) => {
     if (array.length === 0) {
-      console.log(values);
-      console.log(connections);
       return;
     }
 
-    for (const item of array) {
-      console.log(
-        `Processing item: ${item.id}, connections_count: ${item.connections_count}, inputs: ${item.inputs}`
-      );
-      if (item.connections_count <= item.inputs.length) {
-        console.log(`Processing item: ${item.id} with inputs: ${item.inputs}`);
-        array = array.filter((i) => i.id !== item.id);
-        console.log(`Removed item: ${item.id} from array.`);
+    const nextArray = [...array];
 
+    for (const item of array) {
+      if (item.connections_count <= item.inputs.length) {
         const element = cellElements[item.id];
         const info = elementToFunctionMap[element.option];
 
@@ -70,16 +65,25 @@ export const useCellsCalculate = ({
         console.log(
           `Calculated value for item ${item.id}: ${value}, inputs: ${item.inputs}`
         );
+
+        updateConnectionsCountAndInputs({
+          connections,
+          item,
+          array: nextArray,
+          value,
+        });
+
+        // Remove the item after processing
+        const index = nextArray.findIndex((i) => i.id === item.id);
+        if (index !== -1) {
+          nextArray.splice(index, 1);
+        }
       }
-      updateConnectionsCountAndInputs({
-        connections,
-        item,
-        array,
-        value: values[item.id] || 0,
-      });
     }
+
+    // Continue processing the remaining array after a delay
     setTimeout(() => {
-      calculate({ array });
+      calculate({ array: nextArray });
     }, 1000);
   };
 
@@ -123,5 +127,6 @@ export const useCellsCalculate = ({
 
   return {
     triggerCalculation,
+    values,
   };
 };

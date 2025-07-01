@@ -13,7 +13,11 @@ export const elementToFunctionMap: Record<
     func: (input: number[]) => number;
   }
 > = {
-  "Random Number": { min: 0, max: 0, func: (input: number[]) => Math.random() },
+  "Random Number": {
+    min: 0,
+    max: 0,
+    func: (input: number[]) => Math.floor(Math.random() * 100),
+  },
   "Something Else": { min: 0, max: 0, func: (input: number[]) => 42 },
   "Plus 5": {
     min: 1,
