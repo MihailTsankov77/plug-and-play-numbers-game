@@ -10,16 +10,15 @@ import {
   TypeOption,
 } from "../../../elements/components/radio.selector/RadioSelector";
 import { AddItemDialog } from "../add.item.dialog/AddItemDialog";
-import { getElement } from "../../../elements/utils/getElement";
+import { Element } from "../../../elements/utils/getElement";
 import { useCellElementsContext } from "../../contextes/CellElementsContext";
 
 export const Cell = memo(function Cell(props: {
   id: CellId;
   addCell: (cellId: CellId, direction: Direction) => void;
-  element?: { type: ElementType; option: TypeOption } | undefined;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-   const { addElement  } = useCellElementsContext();
+   const { addElement, cellElements  } = useCellElementsContext();
 
   const { setDimensions } = useCellDimensionsContext();
 
@@ -56,6 +55,8 @@ export const Cell = memo(function Cell(props: {
     return () => observer.disconnect();
   }, []);
 
+  const element = cellElements[props.id];
+
   return (
     <div className="cell-container-0" ref={containerRef}>
       <div className="cell-container-1">
@@ -63,8 +64,8 @@ export const Cell = memo(function Cell(props: {
         <div className="cell-container-2">
           <AddCellButton direction="left" addCell={onPress} />
           <div className="cell">
-            {props.element ? (
-              getElement(props.element.type, props.element.option)
+            {element ? (
+              <Element type={element.type} option={element.option} />
             ) : (
               <AddButton animated onPress={handleOpen} />
             )}

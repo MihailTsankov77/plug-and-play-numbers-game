@@ -4,19 +4,19 @@ import { DelayTransformator } from "../components/transformators/Delay";
 import { MultiplyTransformator } from "../components/transformators/Multiply";
 import { SumTransformator } from "../components/transformators/Sum";
 
-export const getElement = (type: ElementType, option: TypeOption) => {
-  if (type === "generator") {
-    switch (option) {
+export const Element = (props: {type: ElementType, option: TypeOption}) => {
+  if (props.type === "generator") {
+    switch (props.option) {
       case "Random Number":
         return <RandomNumbersGenerator />;
       case "Something Else":
         return <div>Something Else Generator</div>;
       default:
-        console.error("Unknown generator option: " + option);
+        console.error("Unknown generator option: " + props.option);
         return null;
     }
-  } else if (type === "transformator") {
-    switch (option) {
+  } else if (props.type === "transformator") {
+    switch (props.option) {
       case "Plus 5":
         // TODO: Implement input
         return <SumTransformator sumWith={5} input={5} />;
@@ -26,11 +26,11 @@ export const getElement = (type: ElementType, option: TypeOption) => {
       case "Delay 5 Seconds":
         return <DelayTransformator seconds={5} input={5} />;
       default:
-        console.error("Unknown transformator option: " + option);
+        console.error("Unknown transformator option: " + props.option);
         return null;
     }
   }
 
-  console.error("Unknown element type: " + type);
+  console.error("Unknown element type: " + props.type);
   return null;
 };

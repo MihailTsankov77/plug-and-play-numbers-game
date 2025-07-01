@@ -6,6 +6,7 @@ import { CellConnections } from "../cell.connections/CellConnections";
 import { useConnectionState } from "../../hooks/useConnectionState";
 import { useCellsDimensions } from "../../hooks/useCellsDimensions";
 import { useCellsPossibleConnections } from "../../hooks/useCellsPossibleConnections";
+import { CellElementsProvider } from "../../contextes/CellElementsContext";
 
 export const CellOrganizer = memo(function CellOrganizer() {
   const { cellCollection, addCell } = useCellState();
@@ -18,7 +19,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
     useConnectionState(possibleConnections);
 
   return (
-    <>
+    <CellElementsProvider>
       <div className="cell-container">
         <CellDimensionsProvider>
           <CellBlock cellCollection={cellCollection} addCell={addCell} />
@@ -30,6 +31,6 @@ export const CellOrganizer = memo(function CellOrganizer() {
         connections={connections}
         addConnection={addConnection}
       />
-    </>
+    </CellElementsProvider>
   );
 });

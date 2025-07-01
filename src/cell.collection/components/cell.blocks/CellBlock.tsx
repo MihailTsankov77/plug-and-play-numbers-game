@@ -30,41 +30,15 @@ export const CellBlock = memo(function CellBlock(
 });
 
 const Row = memo(function Row(props: CellRow & CommonProps) {
-  const { registerCell, getElementById  } = useCellElementsContext();
-
   const addCell = (cellId: CellId, direction: Direction) => {
     props.addCell(props.id, cellId, direction);
   };
-
-  useEffect(() => {
-    props.children
-      .filter((cell) => typeof cell === "string")
-      .forEach((cell) => {
-        registerCell(cell);
-      });
-  }, [props.children, registerCell]);
-
-  const getElement = useCallback(
-    (id: string) => {
-      const element = getElementById(id);
-      if (element?.option && element?.type) {
-        return { type: element.type, option: element.option };
-      }
-      return undefined;
-    },
-    [getElementById]
-  );
 
   return (
     <div className="cell-row">
       {props.children.map((child) =>
         typeof child === "string" ? (
-          <Cell
-            key={child}
-            id={child}
-            addCell={addCell}
-            element={getElement(child)}
-          />
+          <Cell key={child} id={child} addCell={addCell} />
         ) : (
           <Column key={child.id} {...props} {...child} />
         )
@@ -74,41 +48,15 @@ const Row = memo(function Row(props: CellRow & CommonProps) {
 });
 
 const Column = memo(function Column(props: CellColumn & CommonProps) {
-  const { registerCell, getElementById  } = useCellElementsContext();
-
   const addCell = (cellId: CellId, direction: Direction) => {
     props.addCell(props.id, cellId, direction);
   };
-
-  useEffect(() => {
-    props.children
-      .filter((cell) => typeof cell === "string")
-      .forEach((cell) => {
-        registerCell(cell);
-      });
-  }, [props.children, registerCell]);
-
-  const getElement = useCallback(
-    (id: string) => {
-      const element = getElementById(id);
-      if (element?.option && element?.type) {
-        return { type: element.type, option: element.option };
-      }
-      return undefined;
-    },
-    [getElementById]
-  );
 
   return (
     <div className="cell-column">
       {props.children.map((child) =>
         typeof child === "string" ? (
-          <Cell
-            key={child}
-            id={child}
-            addCell={addCell}
-            element={getElement(child)}
-          />
+          <Cell key={child} id={child} addCell={addCell} />
         ) : (
           <Row key={child.id} {...props} {...child} />
         )
