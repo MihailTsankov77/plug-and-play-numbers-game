@@ -1,8 +1,9 @@
+import { CellId } from "./Cell";
 import { Coordinates } from "./Dimensions";
 
 export type Connection = {
-  from: string;
-  to: string;
+  from: CellId;
+  to: CellId;
 };
 
 export type PossibleConnection = Connection & {
