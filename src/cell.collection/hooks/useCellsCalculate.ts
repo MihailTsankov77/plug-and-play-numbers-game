@@ -4,16 +4,11 @@ import { useState } from "react";
 import { useCellElementsContext } from "../contextes/CellElementsContext";
 import { CellId } from "../types/Cell";
 
-export const useCellsCalculate = () => {
-  const [values, setValues] = useState<
-    Record<
-      CellId,
-      {
-        value: number;
-        func: ((n: number[]) => void) | ((n: number[]) => number);
-      }
-    >
-  >({});
+export function useCellsCalculate(): {
+  valuesByCellId: Record<CellId, number | undefined>;
+  triggerCalculation: (params: { connections: Connection[] }) => void;
+} {
+  const [values, setValues] = useState<Record<CellId, number>>({});
 
   const { cellElements, generatorElements } = useCellElementsContext();
 
@@ -30,12 +25,7 @@ export const useCellsCalculate = () => {
       inputs: [],
     }));
 
-    console.log("Initial array:", array);
-
     calculate({ array, connections });
-
-    console.log("Final values:", values);
-    console.log("Connections:", connections);
   };
 
   const calculate = async ({
@@ -71,11 +61,8 @@ export const useCellsCalculate = () => {
         const value = info.func(item.inputs);
         setValues((prev) => ({
           ...prev,
-          [item.id]: { value, func: info.func },
+          [item.id]: value,
         }));
-        console.log(
-          `Calculated value for item ${item.id}: ${value}, inputs: ${item.inputs}`
-        );
 
         updateConnectionsCountAndInputs({
           connections,
@@ -113,12 +100,8 @@ export const useCellsCalculate = () => {
       if (connection.from === item.id) {
         const toItem = array.find((i) => i.id === connection.to);
         if (toItem) {
-          console.log(`Adding value ${value} to item ${toItem.id} inputs.`);
           toItem.inputs.push(value);
         } else {
-          console.warn(
-            `No item found for connection to ${connection.to}. Adding new item.`
-          );
           array.push({
             id: connection.to,
             connections_count: getConnectionsCount(connections, connection.to),
@@ -138,6 +121,6 @@ export const useCellsCalculate = () => {
 
   return {
     triggerCalculation,
-    values,
+    valuesByCellId: values,
   };
-};
+}
