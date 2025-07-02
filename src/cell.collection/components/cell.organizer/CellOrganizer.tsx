@@ -1,4 +1,4 @@
-import { memo, useCallback } from "react";
+import { memo, useCallback, useEffect } from "react";
 import "./CellOrganizer.css";
 import { CellBlock } from "../cell.blocks/CellBlock";
 import { useCellState } from "../../hooks/useCellState";
@@ -23,6 +23,20 @@ export const CellOrganizer = memo(function CellOrganizer() {
   const triggerCalculationFunction = useCallback(() => {
     triggerCalculation({ connections: validConnections });
   }, [validConnections]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === "Enter") {
+        triggerCalculationFunction();
+      }
+    },
+    [triggerCalculationFunction]
+  );
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [handleKeyDown]);
 
   return (
     <>
