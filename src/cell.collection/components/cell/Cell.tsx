@@ -1,11 +1,4 @@
-import {
-  memo,
-  useLayoutEffect,
-  useRef,
-  useCallback,
-  useState,
-  useEffect,
-} from "react";
+import { memo, useRef, useCallback, useState, useEffect } from "react";
 import "./Cell.css";
 import { CellId } from "../../types/Cell";
 import { AddCellButton } from "../add.cell.button/AddCellButton";
