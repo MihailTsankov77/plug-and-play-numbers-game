@@ -29,7 +29,7 @@ export const elementToFunctionMap: Record<
   {
     min: number;
     max: number;
-    func: (input: number[]) => number;
+    func: (input: number[]) => number | Promise<number>;
   }
 > = {
   "Random Number": {
@@ -71,5 +71,12 @@ export const elementToFunctionMap: Record<
     min: 1,
     max: 4,
     func: (input) => input.reduce((acc, val) => acc + val, 0),
+  },
+  Delay: {
+    min: 1,
+    max: 1,
+    func: (input: number[]) => {
+      return new Promise(() => setTimeout(() => input[0], 5000));
+    },
   },
 };

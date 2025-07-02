@@ -14,6 +14,7 @@ const generatorTexts: Record<TypeOption, string> = {
   "Multiply by 2": "x 2",
   "Mod 10": "% 10",
   Sum: "Sum",
+  Delay: "Delay",
 };
 
 export const Element = (props: {

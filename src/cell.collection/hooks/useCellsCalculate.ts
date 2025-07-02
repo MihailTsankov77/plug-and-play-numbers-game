@@ -61,6 +61,7 @@ export function useCellsCalculate(): {
         const value = info.func(item.inputs);
         setValues((prev) => ({
           ...prev,
+          //   Тук е проверката дали е Promise, ако е, изчакваме да се изпълни
           [item.id]: value,
         }));
 

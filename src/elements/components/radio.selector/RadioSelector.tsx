@@ -16,6 +16,7 @@ const transformatorOptions = [
   "Multiply by 2",
   "Mod 10",
   "Sum",
+  "Delay",
 ] as const;
 
 export type GeneratorOption = (typeof generatorOptions)[number];
