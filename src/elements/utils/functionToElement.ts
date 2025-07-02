@@ -29,9 +29,9 @@ export const elementToFunctionMap: Record<
     max: 4,
     func: (input: number[]) => input.reduce((acc, val) => acc * val, 2),
   },
-  "Delay 5 Seconds": {
+  "Mod 10": {
     min: 1,
     max: 1,
-    func: (input: number[]) => setTimeout(() => input, 5000),
+    func: (input: number[]) => input[0] % 10,
   },
 };

@@ -1,11 +1,11 @@
 import { BaseAction } from "../BaseAction/BaseAction";
 
-export const MultiplyTransformator = ({
+export const ModTransformator = ({
   factor,
   value,
 }: {
   value?: number;
   factor: number;
 }) => {
-  return <BaseAction title={`x ${factor}`} value={value} />;
+  return <BaseAction title={`mod ${factor}`} value={value} />;
 };

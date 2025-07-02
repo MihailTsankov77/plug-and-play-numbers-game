@@ -7,6 +7,12 @@ import { useCellElementsContext } from "../../contextes/CellElementsContext";
 
 type CommonProps = {
   addCell: (containerId: string, cellId: CellId, direction: Direction) => void;
+  valuesByCellId: Record<
+    CellId,
+    {
+      value: number;
+    }
+  >;
 };
 
 export const CellBlock = memo(function CellBlock(
@@ -38,7 +44,12 @@ const Row = memo(function Row(props: CellRow & CommonProps) {
     <div className="cell-row">
       {props.children.map((child) =>
         typeof child === "string" ? (
-          <Cell key={child} id={child} addCell={addCell} />
+          <Cell
+            key={child}
+            id={child}
+            addCell={addCell}
+            value={props.valuesByCellId[child]?.value}
+          />
         ) : (
           <Column key={child.id} {...props} {...child} />
         )
@@ -56,7 +67,12 @@ const Column = memo(function Column(props: CellColumn & CommonProps) {
     <div className="cell-column">
       {props.children.map((child) =>
         typeof child === "string" ? (
-          <Cell key={child} id={child} addCell={addCell} />
+          <Cell
+            key={child}
+            id={child}
+            addCell={addCell}
+            value={props.valuesByCellId[child]?.value}
+          />
         ) : (
           <Row key={child.id} {...props} {...child} />
         )

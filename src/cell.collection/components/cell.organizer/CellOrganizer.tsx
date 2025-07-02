@@ -22,13 +22,7 @@ export const CellOrganizer = memo(function CellOrganizer() {
   const { connections, addConnection } =
     useConnectionState(possibleConnections);
 
-  const { generatorElements, cellElements } = useCellElementsContext();
-
-  const { triggerCalculation, values } = useCellsCalculate({
-    connections,
-    generatorElements,
-    cellElements,
-  });
+  const { triggerCalculation, values } = useCellsCalculate();
 
   console.log("CellOrganizer render", values);
 
@@ -36,7 +30,11 @@ export const CellOrganizer = memo(function CellOrganizer() {
     <>
       <div className="cell-container">
         <CellDimensionsProvider>
-          <CellBlock cellCollection={cellCollection} addCell={addCell} />
+          <CellBlock
+            cellCollection={cellCollection}
+            addCell={addCell}
+            valuesByCellId={values}
+          />
         </CellDimensionsProvider>
       </div>
 
@@ -45,7 +43,9 @@ export const CellOrganizer = memo(function CellOrganizer() {
         connections={connections}
         addConnection={addConnection}
       />
-      <button onClick={triggerCalculation}>Trigger</button>
+      <button onClick={() => triggerCalculation({ connections })}>
+        Trigger
+      </button>
     </>
   );
 });

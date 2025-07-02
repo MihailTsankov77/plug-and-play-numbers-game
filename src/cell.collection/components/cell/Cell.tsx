@@ -16,6 +16,7 @@ import { useCellElementsContext } from "../../contextes/CellElementsContext";
 export const Cell = memo(function Cell(props: {
   id: CellId;
   addCell: (cellId: CellId, direction: Direction) => void;
+  value?: number;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const { addElement, cellElements } = useCellElementsContext();
@@ -65,7 +66,12 @@ export const Cell = memo(function Cell(props: {
           <AddCellButton direction="left" addCell={onPress} />
           <div className="cell">
             {element ? (
-              <Element type={element.type} option={element.option} />
+              <Element
+                type={element.type}
+                option={element.option}
+                cellId={props.id}
+                value={props.value}
+              />
             ) : (
               <AddButton animated onPress={handleOpen} />
             )}

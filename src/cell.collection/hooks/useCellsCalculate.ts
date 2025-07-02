@@ -1,23 +1,29 @@
 import { elementToFunctionMap } from "../../elements/utils/functionToElement";
 import { Connection } from "../types/Connections";
-import {
-  ElementType,
-  TypeOption,
-} from "../../elements/components/radio.selector/RadioSelector";
 import { useState } from "react";
+import { useCellElementsContext } from "../contextes/CellElementsContext";
+import { CellId } from "../types/Cell";
 
-export const useCellsCalculate = ({
-  connections,
-  generatorElements,
-  cellElements,
-}: {
-  connections: Connection[];
-  generatorElements: string[];
-  cellElements: Record<string, { type: ElementType; option: TypeOption }>;
-}) => {
-  const [values, setValues] = useState<Record<string, number>>({});
+export const useCellsCalculate = () => {
+  const [values, setValues] = useState<
+    Record<
+      CellId,
+      {
+        value: number;
+        func: ((n: number[]) => void) | ((n: number[]) => number);
+      }
+    >
+  >({});
 
-  const triggerCalculation = () => {
+  const { cellElements, generatorElements } = useCellElementsContext();
+
+  const triggerCalculation = ({
+    connections,
+  }: {
+    connections: Connection[];
+  }) => {
+    setValues({});
+
     const array = generatorElements.map((element) => ({
       id: element,
       connections_count: 0,
@@ -26,7 +32,7 @@ export const useCellsCalculate = ({
 
     console.log("Initial array:", array);
 
-    calculate({ array });
+    calculate({ array, connections });
 
     console.log("Final values:", values);
     console.log("Connections:", connections);
@@ -34,8 +40,10 @@ export const useCellsCalculate = ({
 
   const calculate = async ({
     array,
+    connections,
   }: {
-    array: { id: string; connections_count: number; inputs: number[] }[];
+    array: { id: CellId; connections_count: number; inputs: number[] }[];
+    connections: Connection[];
   }) => {
     if (array.length === 0) {
       return;
@@ -61,7 +69,10 @@ export const useCellsCalculate = ({
         }
 
         const value = info.func(item.inputs);
-        setValues((prev) => ({ ...prev, [item.id]: value }));
+        setValues((prev) => ({
+          ...prev,
+          [item.id]: { value, func: info.func },
+        }));
         console.log(
           `Calculated value for item ${item.id}: ${value}, inputs: ${item.inputs}`
         );
@@ -83,8 +94,8 @@ export const useCellsCalculate = ({
 
     // Continue processing the remaining array after a delay
     setTimeout(() => {
-      calculate({ array: nextArray });
-    }, 1000);
+      calculate({ array: nextArray, connections });
+    }, 500);
   };
 
   const updateConnectionsCountAndInputs = ({

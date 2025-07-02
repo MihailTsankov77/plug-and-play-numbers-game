@@ -6,6 +6,10 @@ export function useConnectionState(possibleConnections: ConnectionEvent[]): {
   addConnection: (connection: ConnectionEvent) => void;
 } {
   const [connections, setConnections] = useState<Connection[]>([]);
+  console.log(
+    "useConnectionState initialized with possibleConnections:",
+    connections
+  );
 
   const addConnection = useCallback((connection: ConnectionEvent) => {
     setConnections((prevConnections) => {
