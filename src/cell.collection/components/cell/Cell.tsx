@@ -12,6 +12,7 @@ import {
 import { AddItemDialog } from "../add.item.dialog/AddItemDialog";
 import { Element } from "../../../elements/utils/Element";
 import { useCellElementsContext } from "../../contextes/CellElementsContext";
+import { DebugMode } from "../../../constants/Debug";
 
 export const Cell = memo(function Cell(props: {
   id: CellId;
@@ -65,6 +66,7 @@ export const Cell = memo(function Cell(props: {
         <div className="cell-container-2">
           <AddCellButton direction="left" addCell={onPress} />
           <div className="cell">
+            {DebugMode ? props.id : ""}
             {element ? (
               <Element
                 type={element.type}

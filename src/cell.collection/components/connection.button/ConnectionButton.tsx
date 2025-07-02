@@ -1,44 +1,27 @@
 import { memo } from "react";
-import {
-  Connection,
-  ConnectionEvent,
-  PossibleConnection,
-} from "../../types/Connections";
+import { Connection, PossibleConnection } from "../../types/Connections";
 import "./ConnectionButton.css";
-
-type ConnectionState = "inactive" | "left" | "right";
 
 export const ConnectionButton = memo(function ConnectionButton(props: {
   possibleConnection: PossibleConnection;
   connections: Connection[];
   invalidConnections: Connection[];
-  addConnection: (connection: ConnectionEvent) => void;
+  addConnection: (connection: Connection) => void;
 }) {
-  const allConnections = [...props.connections, ...props.invalidConnections];
+  const findConnection = (connection: Connection) =>
+    (connection.from === props.possibleConnection.from &&
+      connection.to === props.possibleConnection.to) ||
+    (connection.from === props.possibleConnection.to &&
+      connection.to === props.possibleConnection.from);
 
-  const state: ConnectionState = allConnections.some(
-    (connection) =>
-      connection.from === props.possibleConnection.from &&
-      connection.to === props.possibleConnection.to
-  )
-    ? "right"
-    : allConnections.some(
-        (connection) =>
-          connection.from === props.possibleConnection.to &&
-          connection.to === props.possibleConnection.from
-      )
-    ? "left"
-    : "inactive";
+  const validConnections = props.connections.find(findConnection);
+  const invalidConnections = !validConnections
+    ? props.invalidConnections.find(findConnection)
+    : undefined;
 
-  const isValidConnection =
-    state === "inactive" ||
-    props.connections.some(
-      (connection) =>
-        (connection.from === props.possibleConnection.from &&
-          connection.to === props.possibleConnection.to) ||
-        (connection.from === props.possibleConnection.to &&
-          connection.to === props.possibleConnection.from)
-    );
+  const state = (validConnections ?? invalidConnections)?.state ?? "inactive";
+
+  const isValidConnection = state === "inactive" || validConnections;
 
   const onPress = () => {
     switch (state) {
@@ -46,6 +29,7 @@ export const ConnectionButton = memo(function ConnectionButton(props: {
         props.addConnection({
           from: props.possibleConnection.from,
           to: props.possibleConnection.to,
+          state: "right",
         });
         break;
       }
@@ -53,6 +37,7 @@ export const ConnectionButton = memo(function ConnectionButton(props: {
         props.addConnection({
           from: props.possibleConnection.to,
           to: props.possibleConnection.from,
+          state: "left",
         });
         break;
       }
@@ -60,7 +45,7 @@ export const ConnectionButton = memo(function ConnectionButton(props: {
         props.addConnection({
           from: props.possibleConnection.from,
           to: props.possibleConnection.to,
-          delete: true,
+          state: "inactive",
         });
         break;
       }

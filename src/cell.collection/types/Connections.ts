@@ -4,13 +4,10 @@ import { Coordinates } from "./Dimensions";
 export type Connection = {
   from: CellId;
   to: CellId;
+  state: "left" | "right" | "inactive";
 };
 
-export type PossibleConnection = Connection & {
+export type PossibleConnection = Omit<Connection, "state"> & {
   direction: "horizontal" | "vertical";
   coordinates: Coordinates;
-};
-
-export type ConnectionEvent = Connection & {
-  delete?: boolean;
 };

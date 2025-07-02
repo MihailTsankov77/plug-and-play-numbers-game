@@ -1,21 +1,21 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Connection, ConnectionEvent } from "../types/Connections";
+import { Connection, PossibleConnection } from "../types/Connections";
 import { useCellElementsContext } from "../contextes/CellElementsContext";
 import { CellId } from "../types/Cell";
 import { elementToFunctionMap } from "../../elements/utils/functionToElement";
 
-export function useConnectionState(possibleConnections: ConnectionEvent[]): {
+export function useConnectionState(possibleConnections: PossibleConnection[]): {
   validConnections: Connection[];
   invalidConnections: Connection[];
-  addConnection: (connection: ConnectionEvent) => void;
+  addConnection: (connection: Connection) => void;
 } {
   const { cellElements } = useCellElementsContext();
 
   const [connections, setConnections] = useState<Connection[]>([]);
 
-  const addConnection = useCallback((connection: ConnectionEvent) => {
+  const addConnection = useCallback((connection: Connection) => {
     setConnections((prevConnections) => {
-      if (connection.delete) {
+      if (connection.state === "inactive") {
         return prevConnections.filter(
           (conn) =>
             !(
