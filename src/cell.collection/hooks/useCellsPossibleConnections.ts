@@ -2,12 +2,15 @@ import { useMemo } from "react";
 import { CellId } from "../types/Cell";
 import { PossibleConnection } from "../types/Connections";
 import { Dimensions } from "../types/Dimensions";
+import { useCellElementsContext } from "../contextes/CellElementsContext";
 
 const EPSILON = 0.1;
 
 export function useCellsPossibleConnections(
   cellDimensions: Record<CellId, Dimensions>
 ): PossibleConnection[] {
+  const { cellElements } = useCellElementsContext();
+
   return useMemo(() => {
     const connections: PossibleConnection[] = [];
 
@@ -69,6 +72,20 @@ export function useCellsPossibleConnections(
       }
     }
 
-    return connections;
-  }, [cellDimensions]);
+    // Remove cells without elements and between generators
+    const result = connections.filter((connection) => {
+      return (
+        cellElements[connection.from] &&
+        cellElements[connection.to] &&
+        !(
+          cellElements[connection.from]?.type === "generator" &&
+          cellElements[connection.to]?.type === "generator"
+        )
+      );
+    });
+
+    console.log("Possible connections:", connections, result);
+
+    return result;
+  }, [cellDimensions, cellElements]);
 }

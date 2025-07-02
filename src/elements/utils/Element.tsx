@@ -1,4 +1,5 @@
 import { CellId } from "../../cell.collection/types/Cell";
+import { BaseAction } from "../components/BaseAction/BaseAction";
 import { RandomNumbersGenerator } from "../components/generators/RandomNumbersGenerator";
 import {
   ElementType,
@@ -19,7 +20,7 @@ export const Element = (props: {
       case "Random Number":
         return <RandomNumbersGenerator value={props.value} />;
       case "Something Else":
-        return <div>Something Else Generator</div>;
+        return <BaseAction value={props.value} title="Something else" />;
       default:
         console.error("Unknown generator option: " + props.option);
         return null;
