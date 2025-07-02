@@ -47,8 +47,9 @@ export function useCellsPossibleConnections(
             cellA.x < cellB.x ? cellA.x + cellA.width : cellB.x + cellB.width;
 
           connections.push({
-            from: cellA.id,
-            to: cellB.id,
+            ...(cellA.x < cellB.x
+              ? { from: cellA.id, to: cellB.id }
+              : { from: cellB.id, to: cellA.id }),
             direction: "horizontal",
             coordinates: { x: middleX, y: middleY },
           });
@@ -63,8 +64,9 @@ export function useCellsPossibleConnections(
             cellA.y < cellB.y ? cellA.y + cellA.height : cellB.y + cellB.height;
 
           connections.push({
-            from: cellA.id,
-            to: cellB.id,
+            ...(cellA.y < cellB.y
+              ? { from: cellA.id, to: cellB.id }
+              : { from: cellB.id, to: cellA.id }),
             direction: "vertical",
             coordinates: { x: middleX, y: middleY },
           });
