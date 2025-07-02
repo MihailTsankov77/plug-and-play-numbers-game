@@ -84,8 +84,6 @@ export function useCellsPossibleConnections(
       );
     });
 
-    console.log("Possible connections:", connections, result);
-
     return result;
   }, [cellDimensions, cellElements]);
 }
