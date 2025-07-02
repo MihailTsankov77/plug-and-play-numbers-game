@@ -1,9 +1,8 @@
-import { memo, useCallback, useEffect } from "react";
+import { memo } from "react";
 import "./CellBlock.css";
 import { Cell } from "../cell/Cell";
 import { CellId, CellCollection, CellColumn, CellRow } from "../../types/Cell";
 import { Direction } from "../../types/Dimensions";
-import { useCellElementsContext } from "../../contextes/CellElementsContext";
 
 type CommonProps = {
   addCell: (containerId: string, cellId: CellId, direction: Direction) => void;

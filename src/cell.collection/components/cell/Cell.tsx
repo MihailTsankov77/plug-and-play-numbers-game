@@ -1,4 +1,11 @@
-import { memo, useLayoutEffect, useRef, useCallback, useState } from "react";
+import {
+  memo,
+  useLayoutEffect,
+  useRef,
+  useCallback,
+  useState,
+  useEffect,
+} from "react";
 import "./Cell.css";
 import { CellId } from "../../types/Cell";
 import { AddCellButton } from "../add.cell.button/AddCellButton";
@@ -40,7 +47,7 @@ export const Cell = memo(function Cell(props: {
     [addElement, props.id, handleClose]
   );
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!containerRef.current) return;
 
     const observer = new ResizeObserver(([entry]) => {
