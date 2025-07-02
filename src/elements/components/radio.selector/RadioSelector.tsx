@@ -5,8 +5,18 @@ import { RadioButton } from "../../../common/components/radiobutton/RadioButton"
 const typeOptions = ["generator", "transformator"] as const;
 export type ElementType = (typeof typeOptions)[number];
 
-const generatorOptions = ["Random Number", "Something Else"] as const;
-const transformatorOptions = ["Plus 5", "Multiply by 2", "Mod 10"] as const;
+const generatorOptions = [
+  "Random Number",
+  "Even Number",
+  "Odd Number",
+  "Something Else",
+] as const;
+const transformatorOptions = [
+  "Plus 5",
+  "Multiply by 2",
+  "Mod 10",
+  "Sum",
+] as const;
 
 export type GeneratorOption = (typeof generatorOptions)[number];
 export type TransformatorOption = (typeof transformatorOptions)[number];
