@@ -1,8 +1,14 @@
 import { elementToFunctionMap } from "../../elements/utils/functionToElement";
 import { Connection } from "../types/Connections";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useCellElementsContext } from "../contextes/CellElementsContext";
 import { CellId } from "../types/Cell";
+
+type Calculation = {
+  id: CellId;
+  connections_count: number;
+  inputs: number[];
+};
 
 export function useCellsCalculate(): {
   valuesByCellId: Record<CellId, number | undefined>;
@@ -12,6 +18,8 @@ export function useCellsCalculate(): {
 
   const { cellElements, generatorElements } = useCellElementsContext();
 
+  const calculationsRef = useRef<Calculation[]>([]);
+
   const triggerCalculation = ({
     connections,
   }: {
@@ -19,29 +27,21 @@ export function useCellsCalculate(): {
   }) => {
     setValues({});
 
-    const array = generatorElements.map((element) => ({
+    calculationsRef.current = generatorElements.map<Calculation>((element) => ({
       id: element,
       connections_count: 0,
       inputs: [],
     }));
 
-    calculate({ array, connections });
+    calculate({ connections });
   };
 
-  const calculate = async ({
-    array,
-    connections,
-  }: {
-    array: { id: CellId; connections_count: number; inputs: number[] }[];
-    connections: Connection[];
-  }) => {
-    if (array.length === 0) {
+  const calculate = async ({ connections }: { connections: Connection[] }) => {
+    if (calculationsRef.current.length === 0) {
       return;
     }
 
-    const nextArray = [...array];
-
-    for (const item of array) {
+    for (const item of calculationsRef.current) {
       if (item.connections_count <= item.inputs.length) {
         const element = cellElements[item.id];
         const info = elementToFunctionMap[element.option];
@@ -58,51 +58,88 @@ export function useCellsCalculate(): {
           continue;
         }
 
-        const value = info.func(item.inputs);
-        setValues((prev) => ({
-          ...prev,
-          [item.id]: value,
-        }));
+        switch (info.type) {
+          case "sync": {
+            const value = info.func(item.inputs);
+            setValues((prev) => ({
+              ...prev,
+              [item.id]: value,
+            }));
 
-        updateConnectionsCountAndInputs({
-          connections,
-          item,
-          array: nextArray,
-          value,
-        });
+            updateConnectionsCountAndInputs({
+              connections,
+              item,
+              value,
+            });
 
-        // Remove the item after processing
-        const index = nextArray.findIndex((i) => i.id === item.id);
-        if (index !== -1) {
-          nextArray.splice(index, 1);
+            // Remove the item after processing
+            const index = calculationsRef.current.findIndex(
+              (i) => i.id === item.id
+            );
+            if (index !== -1) {
+              calculationsRef.current.splice(index, 1);
+            }
+
+            break;
+          }
+
+          case "async": {
+            info.func(item.inputs).then((value) => {
+              setValues((prev) => ({
+                ...prev,
+                [item.id]: value,
+              }));
+
+              updateConnectionsCountAndInputs({
+                connections,
+                item,
+                value,
+              });
+
+              // Remove the item after processing
+              const index = calculationsRef.current.findIndex(
+                (i) => i.id === item.id
+              );
+              if (index !== -1) {
+                calculationsRef.current.splice(index, 1);
+              }
+
+              calculate({ connections });
+            });
+            break;
+          }
+
+          default: {
+            info satisfies never;
+          }
         }
       }
     }
 
     // Continue processing the remaining array after a delay
     setTimeout(() => {
-      calculate({ array: nextArray, connections });
+      calculate({ connections });
     }, 500);
   };
 
   const updateConnectionsCountAndInputs = ({
     connections,
     item,
-    array,
     value,
   }: {
     connections: Connection[];
-    item: { id: string; connections_count: number; inputs: number[] };
-    array: { id: string; connections_count: number; inputs: number[] }[];
+    item: Calculation;
     value: number;
   }) => {
     for (const connection of connections) {
       if (connection.from === item.id) {
-        const toItem = array.find((i) => i.id === connection.to);
+        const toItem = calculationsRef.current.find(
+          (i) => i.id === connection.to
+        );
         if (toItem) {
           toItem.inputs.push(value);
         } else {
-          array.push({
+          calculationsRef.current.push({
             id: connection.to,
             connections_count: getConnectionsCount(connections, connection.to),
             inputs: [value],
