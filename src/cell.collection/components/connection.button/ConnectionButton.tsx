@@ -11,21 +11,34 @@ type ConnectionState = "inactive" | "left" | "right";
 export const ConnectionButton = memo(function ConnectionButton(props: {
   possibleConnection: PossibleConnection;
   connections: Connection[];
+  invalidConnections: Connection[];
   addConnection: (connection: ConnectionEvent) => void;
 }) {
-  const state: ConnectionState = props.connections.some(
+  const allConnections = [...props.connections, ...props.invalidConnections];
+
+  const state: ConnectionState = allConnections.some(
     (connection) =>
       connection.from === props.possibleConnection.from &&
       connection.to === props.possibleConnection.to
   )
     ? "right"
-    : props.connections.some(
+    : allConnections.some(
         (connection) =>
           connection.from === props.possibleConnection.to &&
           connection.to === props.possibleConnection.from
       )
     ? "left"
     : "inactive";
+
+  const isValidConnection =
+    state === "inactive" ||
+    props.connections.some(
+      (connection) =>
+        (connection.from === props.possibleConnection.from &&
+          connection.to === props.possibleConnection.to) ||
+        (connection.from === props.possibleConnection.to &&
+          connection.to === props.possibleConnection.from)
+    );
 
   const onPress = () => {
     switch (state) {
@@ -69,7 +82,13 @@ export const ConnectionButton = memo(function ConnectionButton(props: {
         top: `${coordinates.y}px`,
       }}
     >
-      <div className={`connection-button ${state}`} onClick={onPress}>
+      <div
+        className={`connection-button ${state}`}
+        style={{
+          backgroundColor: isValidConnection ? "wheat" : "red",
+        }}
+        onClick={onPress}
+      >
         <img
           src={`src/cell.collection/components/connection.button/assets/${state}.png`}
           style={

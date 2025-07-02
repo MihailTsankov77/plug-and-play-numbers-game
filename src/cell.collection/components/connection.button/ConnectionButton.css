@@ -12,7 +12,6 @@
 .connection-button {
   width: 2rem;
   height: 2rem;
-  background-color: wheat;
   border-radius: 50%;
   cursor: pointer;
   user-select: none;

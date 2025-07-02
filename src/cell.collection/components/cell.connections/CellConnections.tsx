@@ -9,6 +9,7 @@ import { ConnectionButton } from "../connection.button/ConnectionButton";
 export const CellConnections = memo(function CellConnections(props: {
   possibleConnections: PossibleConnection[];
   connections: Connection[];
+  invalidConnections: Connection[];
   addConnection: (connection: ConnectionEvent) => void;
 }) {
   return (
@@ -18,6 +19,7 @@ export const CellConnections = memo(function CellConnections(props: {
           key={index}
           possibleConnection={possibleConnection}
           connections={props.connections}
+          invalidConnections={props.invalidConnections}
           addConnection={props.addConnection}
         />
       ))}

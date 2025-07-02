@@ -15,14 +15,14 @@ export const CellOrganizer = memo(function CellOrganizer() {
 
   const possibleConnections = useCellsPossibleConnections(cellDimensions);
 
-  const { triggerCalculation, valuesByCellId } = useCellsCalculate();
-
-  const { connections, addConnection } =
+  const { validConnections, invalidConnections, addConnection } =
     useConnectionState(possibleConnections);
 
+  const { triggerCalculation, valuesByCellId } = useCellsCalculate();
+
   const triggerCalculationFunction = useCallback(() => {
-    triggerCalculation({ connections });
-  }, [connections]);
+    triggerCalculation({ connections: validConnections });
+  }, [validConnections]);
 
   return (
     <>
@@ -38,7 +38,8 @@ export const CellOrganizer = memo(function CellOrganizer() {
 
       <CellConnections
         possibleConnections={possibleConnections}
-        connections={connections}
+        connections={validConnections}
+        invalidConnections={invalidConnections}
         addConnection={addConnection}
       />
       <button onClick={triggerCalculationFunction}>Trigger</button>
